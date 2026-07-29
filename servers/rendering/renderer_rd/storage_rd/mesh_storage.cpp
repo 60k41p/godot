@@ -2162,6 +2162,14 @@ RID MeshStorage::_multimesh_get_buffer_rd_rid(RID p_multimesh) const {
 	return multimesh->buffer;
 }
 
+void MeshStorage::_multimesh_set_extra_data_rd_rid(RID p_multimesh, RID p_buffer) {
+	MultiMesh *multimesh = multimesh_owner.get_or_null(p_multimesh);
+	ERR_FAIL_NULL(multimesh);
+	multimesh->extra_data_buffer = p_buffer;
+	multimesh->uniform_set_3d = RID();
+	multimesh->uniform_set_2d = RID();
+}
+
 Vector<float> MeshStorage::_multimesh_get_buffer(RID p_multimesh) const {
 	MultiMesh *multimesh = multimesh_owner.get_or_null(p_multimesh);
 	ERR_FAIL_NULL_V(multimesh, Vector<float>());

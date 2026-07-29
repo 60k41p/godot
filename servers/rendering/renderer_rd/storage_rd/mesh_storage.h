@@ -253,6 +253,7 @@ private:
 		uint32_t previous_data_cache_dirty_region_count = 0;
 
 		RID buffer; //storage buffer
+		RID extra_data_buffer; //optional per-instance extra data buffer (Set 2 Binding 1)
 		RID uniform_set_3d;
 		RID uniform_set_2d;
 		RID command_buffer; //used if indirect setting is used
@@ -678,6 +679,7 @@ public:
 	virtual RID _multimesh_get_command_buffer_rd_rid(RID p_multimesh) const override;
 	virtual RID _multimesh_get_buffer_rd_rid(RID p_multimesh) const override;
 	virtual Vector<float> _multimesh_get_buffer(RID p_multimesh) const override;
+	virtual void _multimesh_set_extra_data_rd_rid(RID p_multimesh, RID p_buffer) override;
 
 	virtual void _multimesh_set_visible_instances(RID p_multimesh, int p_visible) override;
 	virtual int _multimesh_get_visible_instances(RID p_multimesh) const override;
@@ -742,6 +744,13 @@ public:
 			u.binding = 0;
 			u.append_id(multimesh->buffer);
 			uniforms.push_back(u);
+			if (multimesh->extra_data_buffer.is_valid()) {
+				RD::Uniform u2;
+				u2.uniform_type = RD::UNIFORM_TYPE_STORAGE_BUFFER;
+				u2.binding = 1;
+				u2.append_id(multimesh->extra_data_buffer);
+				uniforms.push_back(u2);
+			}
 			multimesh->uniform_set_3d = RD::get_singleton()->uniform_set_create(uniforms, p_shader, p_set);
 		}
 
@@ -763,6 +772,13 @@ public:
 			u.binding = 0;
 			u.append_id(multimesh->buffer);
 			uniforms.push_back(u);
+			if (multimesh->extra_data_buffer.is_valid()) {
+				RD::Uniform u2;
+				u2.uniform_type = RD::UNIFORM_TYPE_STORAGE_BUFFER;
+				u2.binding = 1;
+				u2.append_id(multimesh->extra_data_buffer);
+				uniforms.push_back(u2);
+			}
 			multimesh->uniform_set_2d = RD::get_singleton()->uniform_set_create(uniforms, p_shader, p_set);
 		}
 

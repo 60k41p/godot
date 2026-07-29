@@ -151,6 +151,7 @@ public:
 	virtual RID multimesh_get_command_buffer_rd_rid(RID p_multimesh) const;
 	virtual RID multimesh_get_buffer_rd_rid(RID p_multimesh) const;
 	virtual Vector<float> multimesh_get_buffer(RID p_multimesh) const;
+	virtual void multimesh_set_extra_data_rd_rid(RID p_multimesh, RID p_buffer);
 
 	virtual void multimesh_set_buffer_interpolated(RID p_multimesh, const Vector<float> &p_buffer, const Vector<float> &p_buffer_prev);
 	virtual void multimesh_set_physics_interpolated(RID p_multimesh, bool p_interpolated);
@@ -191,6 +192,7 @@ public:
 	virtual RID _multimesh_get_command_buffer_rd_rid(RID p_multimesh) const = 0;
 	virtual RID _multimesh_get_buffer_rd_rid(RID p_multimesh) const = 0;
 	virtual Vector<float> _multimesh_get_buffer(RID p_multimesh) const = 0;
+	virtual void _multimesh_set_extra_data_rd_rid(RID p_multimesh, RID p_buffer) = 0;
 
 	virtual void _multimesh_set_visible_instances(RID p_multimesh, int p_visible) = 0;
 	virtual int _multimesh_get_visible_instances(RID p_multimesh) const = 0;

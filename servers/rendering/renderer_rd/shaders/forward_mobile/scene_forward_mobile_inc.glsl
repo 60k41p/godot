@@ -423,4 +423,9 @@ layout(set = 2, binding = 0, std430) restrict readonly buffer Transforms {
 }
 transforms;
 
+layout(set = 2, binding = 1, std430) restrict buffer InstanceExtra {
+	vec4 data[];
+}
+instance_extra;
+
 /* Set 3 User Material */
