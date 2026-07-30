@@ -46,6 +46,7 @@ MeshStorage::MeshStorage() {
 	singleton = this;
 
 	default_rd_storage_buffer = RD::get_singleton()->storage_buffer_create(sizeof(uint32_t) * 4);
+	default_rd_storage_buffer_extra_data = RD::get_singleton()->storage_buffer_create(16);
 
 	//default rd buffers
 	{
@@ -195,6 +196,7 @@ MeshStorage::~MeshStorage() {
 
 	skeleton_shader.shader.version_free(skeleton_shader.version);
 
+	RD::get_singleton()->free_rid(default_rd_storage_buffer_extra_data);
 	RD::get_singleton()->free_rid(default_rd_storage_buffer);
 
 	singleton = nullptr;
@@ -2168,6 +2170,22 @@ void MeshStorage::_multimesh_set_extra_data_rd_rid(RID p_multimesh, RID p_buffer
 	multimesh->extra_data_buffer = p_buffer;
 	multimesh->uniform_set_3d = RID();
 	multimesh->uniform_set_2d = RID();
+}
+
+void MeshStorage::_multimesh_set_extra_data_stride(RID p_multimesh, uint32_t p_stride) {
+	MultiMesh *multimesh = multimesh_owner.get_or_null(p_multimesh);
+	ERR_FAIL_NULL(multimesh);
+	multimesh->extra_data_stride = p_stride;
+	multimesh->uniform_set_3d = RID();
+	multimesh->uniform_set_2d = RID();
+}
+
+uint32_t MeshStorage::_multimesh_get_extra_data_stride(RID p_multimesh) const {
+	MultiMesh *multimesh = multimesh_owner.get_or_null(p_multimesh);
+	if (!multimesh) {
+		return 1;
+	}
+	return multimesh->extra_data_stride;
 }
 
 Vector<float> MeshStorage::_multimesh_get_buffer(RID p_multimesh) const {

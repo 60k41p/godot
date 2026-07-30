@@ -276,6 +276,7 @@ public:
 	virtual RID multimesh_get_command_buffer_rd_rid(RID p_multimesh) const = 0;
 	virtual RID multimesh_get_buffer_rd_rid(RID p_multimesh) const = 0;
 	virtual void multimesh_set_extra_data_rd_rid(RID p_multimesh, RID p_buffer) = 0;
+	virtual void multimesh_set_extra_data_stride(RID p_multimesh, uint32_t p_stride) = 0;
 	virtual Vector<float> multimesh_get_buffer(RID p_multimesh) const = 0;
 
 	// Interpolation.

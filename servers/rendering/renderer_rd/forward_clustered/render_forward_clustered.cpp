@@ -578,9 +578,11 @@ void RenderForwardClustered::_render_list_template(RenderingDevice::DrawListID p
 				particles_storage->particles_get_instance_buffer_motion_vectors_offsets(surf->owner->data->base, push_constant.multimesh_motion_vectors_current_offset, push_constant.multimesh_motion_vectors_previous_offset);
 			} else if (surf->owner->base_flags & INSTANCE_DATA_FLAG_MULTIMESH) {
 				mesh_storage->_multimesh_get_motion_vectors_offsets(surf->owner->data->base, push_constant.multimesh_motion_vectors_current_offset, push_constant.multimesh_motion_vectors_previous_offset);
+				push_constant.extra_data_stride = mesh_storage->multimesh_get_extra_data_stride(surf->owner->data->base);
 			} else {
 				push_constant.multimesh_motion_vectors_current_offset = 0;
 				push_constant.multimesh_motion_vectors_previous_offset = 0;
+				push_constant.extra_data_stride = 1;
 			}
 
 			size_t push_constant_size = 0;

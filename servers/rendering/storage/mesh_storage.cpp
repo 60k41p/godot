@@ -263,6 +263,14 @@ void RendererMeshStorage::multimesh_set_extra_data_rd_rid(RID p_multimesh, RID p
 	_multimesh_set_extra_data_rd_rid(p_multimesh, p_buffer);
 }
 
+void RendererMeshStorage::multimesh_set_extra_data_stride(RID p_multimesh, uint32_t p_stride) {
+	_multimesh_set_extra_data_stride(p_multimesh, p_stride);
+}
+
+uint32_t RendererMeshStorage::multimesh_get_extra_data_stride(RID p_multimesh) const {
+	return _multimesh_get_extra_data_stride(p_multimesh);
+}
+
 Vector<float> RendererMeshStorage::multimesh_get_buffer(RID p_multimesh) const {
 	return _multimesh_get_buffer(p_multimesh);
 }
