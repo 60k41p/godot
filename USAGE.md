@@ -17,15 +17,15 @@ RenderingServer.multimesh_set_extra_data_stride(multimesh: RID, stride: int)
 
 ## Shader Access
 
-In any `shader_type spatial` material's `vertex()` function, the extra data buffer is accessible via the built-in `INSTANCE_EXTRA`:
+In any `shader_type spatial` material's `vertex()` function, the extra data buffer is accessed via the built-in `INSTANCE_EXTRA` with explicit index brackets:
 
 ```glsl
-vec4 slot_0 = INSTANCE_EXTRA;       // slot 0 (backward compat)
+vec4 slot_0 = INSTANCE_EXTRA[0];    // slot 0
 vec4 slot_1 = INSTANCE_EXTRA[1];    // slot 1 when stride >= 2
 vec4 slot_N = INSTANCE_EXTRA[N];    // any slot < stride
 ```
 
-- `INSTANCE_EXTRA` alone returns slot 0 (same as `INSTANCE_EXTRA[0]`).
+- Bare `INSTANCE_EXTRA` (without brackets) is an alias for slot 0 — kept for backward compatibility with stride = 1 shaders. Prefer explicit `INSTANCE_EXTRA[i]`.
 - `INSTANCE_EXTRA[i]` returns slot `i`, where `i < extra_data_stride`.
 - The index can be a literal or a variable (`INSTANCE_EXTRA[INSTANCE_ID]`).
 - `INSTANCE_ID` maps to the per-draw-call instance index (see Important Notes below).
@@ -91,7 +91,7 @@ Where `STRIDE` matches the stride you set via `multimesh_set_extra_data_stride`.
 shader_type spatial;
 
 void vertex() {
-    vec4 color_tint = INSTANCE_EXTRA;       // slot 0 (stride >= 1)
+    vec4 color_tint = INSTANCE_EXTRA[0];    // slot 0 (stride >= 1)
     vec4 custom_val = INSTANCE_EXTRA[1];    // slot 1 (stride >= 2)
     // Dynamic indexing also works:
     for (int i = 0; i < 2; i++) {
@@ -104,7 +104,7 @@ void vertex() {
 
 - **`INSTANCE_ID` is a transient index, not a stable entity ID.** `INSTANCE_ID` (mapped from `gl_InstanceIndex`) is the per-draw-call instance index — `0, 1, 2, ..., instance_count-1`. For indirect draws where a compute shader compacts visible instances, it is the compacted index, not the original entity ID. If you need persistent entity lookups, store an entity ID in the extra data buffer at a known slot position.
 
-- **`INSTANCE_EXTRA` is an indexed SSBO access, not a local variable.** The compiler desugars `INSTANCE_EXTRA` to `instance_extra_ssbo.data[gl_InstanceIndex * stride + slot]`. Using `INSTANCE_EXTRA` without an index is equivalent to `INSTANCE_EXTRA[0]`.
+- **`INSTANCE_EXTRA` is array-indexed.** The compiler desugars `INSTANCE_EXTRA[i]` to `instance_extra_ssbo.data[gl_InstanceIndex * stride + i]`. Bare `INSTANCE_EXTRA` without brackets desugars to slot 0 (`... + 0]`) — a legacy alias kept for stride = 1 shaders; prefer explicit `INSTANCE_EXTRA[0]`.
 
 - **`use_indirect` is optional.** Non-indirect MultiMeshes work fine — the extra data buffer binds and indexes the same way. Indirect mode is typical when a compute shader drives instance culling/compaction.
 
