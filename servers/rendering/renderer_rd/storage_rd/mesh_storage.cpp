@@ -46,7 +46,7 @@ MeshStorage::MeshStorage() {
 	singleton = this;
 
 	default_rd_storage_buffer = RD::get_singleton()->storage_buffer_create(sizeof(uint32_t) * 4);
-	default_rd_storage_buffer_extra_data = RD::get_singleton()->storage_buffer_create(16);
+	default_rd_storage_buffer_extra_data = RD::get_singleton()->storage_buffer_create(1024);
 
 	//default rd buffers
 	{

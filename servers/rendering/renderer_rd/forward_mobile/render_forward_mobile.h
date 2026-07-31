@@ -207,10 +207,11 @@ private:
 		};
 
 		struct PushConstant {
-			uint32_t uv_offset;
 			uint32_t base_index;
+			uint32_t uv_offset; //packed
 			uint32_t multimesh_motion_vectors_current_offset;
 			uint32_t multimesh_motion_vectors_previous_offset;
+			uint32_t extra_data_stride;
 			PushConstantUbershader ubershader;
 		};
 

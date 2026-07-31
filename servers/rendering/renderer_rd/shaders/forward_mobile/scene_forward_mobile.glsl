@@ -277,12 +277,8 @@ void vertex_shader(in vec3 vertex,
 		in uint scene_directional_light_count,
 		out vec4 screen_position_output) {
 	vec4 instance_custom = vec4(0.0);
-	vec4 instance_extra = vec4(0.0);
 #if defined(COLOR_USED)
 	vec4 color_highp = color_attrib;
-#endif
-#if defined(ENABLE_INSTANCE_EXTRA)
-	instance_extra = instance_extra_ssbo.data[gl_InstanceIndex * draw_call.extra_data_stride + 0];
 #endif
 
 	mat4 inv_view_matrix = transpose(mat4(in_inv_view_matrix[0],

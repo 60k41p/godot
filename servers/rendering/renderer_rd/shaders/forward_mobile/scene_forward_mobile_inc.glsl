@@ -13,7 +13,7 @@
 
 #define USING_MOBILE_RENDERER
 
-	layout(push_constant, std430) uniform DrawCall {
+layout(push_constant, std430) uniform DrawCall {
 	uint instance_index;
 	uint uv_offset;
 	uint multimesh_motion_vectors_current_offset;
@@ -424,7 +424,7 @@ layout(set = 2, binding = 0, std430) restrict readonly buffer Transforms {
 }
 transforms;
 
-layout(set = 2, binding = 1, std430) restrict buffer InstanceExtra {
+layout(set = 2, binding = 1, std430) restrict readonly buffer InstanceExtra {
 	vec4 data[];
 }
 instance_extra_ssbo;

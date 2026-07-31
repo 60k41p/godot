@@ -926,7 +926,9 @@ String ShaderCompiler::_dump_node_code(const SL::Node *p_node, int p_level, Gene
 				used_flag_pointers.insert(vnode->name);
 			}
 
-			if (p_default_actions.renames.has(vnode->name)) {
+			if (vnode->name == "INSTANCE_EXTRA") {
+				code = "instance_extra_ssbo.data[int(gl_InstanceIndex) * int(draw_call.extra_data_stride) + 0]";
+			} else if (p_default_actions.renames.has(vnode->name)) {
 				code = p_default_actions.renames[vnode->name];
 			} else {
 				bool param_found = false;
@@ -1425,6 +1427,14 @@ String ShaderCompiler::_dump_node_code(const SL::Node *p_node, int p_level, Gene
 					}
 				} break;
 				case SL::OP_INDEX: {
+					if (onode->arguments[0]->type == SL::Node::NODE_TYPE_VARIABLE) {
+						const SL::VariableNode *vnode = static_cast<const SL::VariableNode *>(onode->arguments[0]);
+						if (vnode->name == "INSTANCE_EXTRA") {
+							String idx = _dump_node_code(onode->arguments[1], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);
+							code += "instance_extra_ssbo.data[int(gl_InstanceIndex) * int(draw_call.extra_data_stride) + int(" + idx + ")]";
+							break;
+						}
+					}
 					code += _dump_node_code(onode->arguments[0], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);
 					code += "[";
 					code += _dump_node_code(onode->arguments[1], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);

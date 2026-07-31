@@ -234,12 +234,8 @@ void vertex_shader(vec3 vertex_input,
 #endif
 		out vec4 screen_pos) {
 	vec4 instance_custom = vec4(0.0);
-	vec4 instance_extra = vec4(0.0);
 #if defined(COLOR_USED)
 	color_interp = color_attrib;
-#endif
-#if defined(ENABLE_INSTANCE_EXTRA)
-	instance_extra = instance_extra_ssbo.data[gl_InstanceIndex * draw_call.extra_data_stride + 0];
 #endif
 
 	mat4 inv_view_matrix = transpose(mat4(scene_data.inv_view_matrix[0],
