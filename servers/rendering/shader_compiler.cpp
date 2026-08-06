@@ -926,7 +926,9 @@ String ShaderCompiler::_dump_node_code(const SL::Node *p_node, int p_level, Gene
 				used_flag_pointers.insert(vnode->name);
 			}
 
-			if (p_default_actions.renames.has(vnode->name)) {
+			if (vnode->name == "INSTANCE_CUSTOM_ID" && !p_default_actions.instance_custom_id_variable.is_empty()) {
+				code = p_default_actions.instance_custom_id_variable;
+			} else if (p_default_actions.renames.has(vnode->name)) {
 				code = p_default_actions.renames[vnode->name];
 			} else {
 				bool param_found = false;

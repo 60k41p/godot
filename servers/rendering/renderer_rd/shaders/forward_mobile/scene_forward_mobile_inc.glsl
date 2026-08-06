@@ -348,6 +348,7 @@ struct InstanceData {
 	vec4 uv_scale;
 	uint flags;
 	uint instance_uniforms_ofs; // Base offset in global buffer for instance variables.
+	uint custom_id; // Stable user-controlled per-instance identifier.
 	uint gi_offset; // GI information when using lightmapping (VCT or lightmap index).
 	uint layer_mask;
 	highp mat3x4 prev_transform;

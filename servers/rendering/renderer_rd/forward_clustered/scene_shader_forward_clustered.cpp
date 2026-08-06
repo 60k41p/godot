@@ -907,6 +907,7 @@ void SceneShaderForwardClustered::init(const String p_defines) {
 		actions.default_repeat = ShaderLanguage::REPEAT_ENABLE;
 		actions.global_buffer_array_variable = "global_shader_uniforms.data";
 		actions.instance_uniform_index_variable = "instances.data[instance_index_interp].instance_uniforms_ofs";
+		actions.instance_custom_id_variable = "instances.data[instance_index_interp].custom_id";
 
 		actions.check_multiview_samplers = true;
 
