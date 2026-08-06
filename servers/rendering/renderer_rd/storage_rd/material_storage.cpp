@@ -37,6 +37,7 @@
 #include "core/templates/local_vector.h"
 #include "servers/rendering/renderer_rd/forward_clustered/scene_shader_forward_clustered.h"
 #include "servers/rendering/renderer_rd/forward_mobile/scene_shader_forward_mobile.h"
+#include "servers/rendering/renderer_rd/renderer_scene_render_rd.h"
 #include "servers/rendering/renderer_rd/storage_rd/texture_storage.h"
 #include "servers/rendering/storage/variant_converters.h"
 
@@ -1505,6 +1506,12 @@ MaterialStorage::MaterialStorage() {
 	global_shader_uniforms.buffer_dirty_regions = memnew_arr(bool, 1 + (global_shader_uniforms.buffer_size / GlobalShaderUniforms::BUFFER_DIRTY_REGION_SIZE));
 	memset(global_shader_uniforms.buffer_dirty_regions, 0, sizeof(bool) * (1 + (global_shader_uniforms.buffer_size / GlobalShaderUniforms::BUFFER_DIRTY_REGION_SIZE)));
 	global_shader_uniforms.buffer = RD::get_singleton()->storage_buffer_create(sizeof(GlobalShaderUniforms::Value) * global_shader_uniforms.buffer_size);
+
+	// Instance userdata buffer (default: 16 bytes = 1 vec4 zeroed)
+	default_instance_userdata_buffer = RD::get_singleton()->storage_buffer_create(16);
+	uint32_t zero_data[4] = { 0, 0, 0, 0 };
+	RD::get_singleton()->buffer_update(default_instance_userdata_buffer, 0, 16, zero_data, 16);
+	instance_userdata_buffer = RID();
 }
 
 MaterialStorage::~MaterialStorage() {
@@ -1512,6 +1519,9 @@ MaterialStorage::~MaterialStorage() {
 	memdelete_arr(global_shader_uniforms.buffer_usage);
 	memdelete_arr(global_shader_uniforms.buffer_dirty_regions);
 	RD::get_singleton()->free_rid(global_shader_uniforms.buffer);
+
+	// Free default instance userdata buffer (user-registered buffer is owned by the game)
+	RD::get_singleton()->free_rid(default_instance_userdata_buffer);
 
 	// buffers
 
@@ -2022,6 +2032,25 @@ void MaterialStorage::global_shader_parameters_clear() {
 
 RID MaterialStorage::global_shader_uniforms_get_storage_buffer() const {
 	return global_shader_uniforms.buffer;
+}
+
+void MaterialStorage::set_instance_userdata_rd_rid(RID p_buffer) {
+	if (instance_userdata_buffer == p_buffer) {
+		return;
+	}
+	instance_userdata_buffer = p_buffer;
+
+	// Invalidate base uniform sets so the new buffer is bound next frame
+	if (RendererSceneRenderRD::get_singleton()) {
+		RendererSceneRenderRD::get_singleton()->base_uniforms_changed();
+	}
+}
+
+RID MaterialStorage::get_instance_userdata_rd_rid() const {
+	if (instance_userdata_buffer.is_valid()) {
+		return instance_userdata_buffer;
+	}
+	return default_instance_userdata_buffer;
 }
 
 int32_t MaterialStorage::global_shader_parameters_instance_allocate(RID p_instance) {

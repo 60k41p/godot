@@ -221,6 +221,7 @@ private:
 			float uv_scale[4];
 			uint32_t flags;
 			uint32_t instance_uniforms_ofs; // Base offset in global buffer for instance variables.
+			uint32_t instance_userdata_ofs; // Base offset in userdata buffer for per-instance user data.
 			uint32_t gi_offset; // GI information when using lightmapping (VCT or lightmap index).
 			uint32_t layer_mask;
 			float prev_transform[12];

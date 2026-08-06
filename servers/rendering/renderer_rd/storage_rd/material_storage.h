@@ -456,6 +456,12 @@ public:
 
 	RID global_shader_uniforms_get_storage_buffer() const;
 
+	virtual void set_instance_userdata_rd_rid(RID p_buffer) override;
+	virtual RID get_instance_userdata_rd_rid() const override;
+
+	RID instance_userdata_buffer;
+	RID default_instance_userdata_buffer;
+
 	/* SHADER API */
 
 	bool owns_shader(RID p_rid) { return shader_owner.owns(p_rid); }

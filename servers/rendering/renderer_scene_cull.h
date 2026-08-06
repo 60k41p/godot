@@ -1070,6 +1070,10 @@ public:
 	virtual Variant instance_geometry_get_shader_parameter(RID p_instance, const StringName &p_parameter) const;
 	virtual Variant instance_geometry_get_shader_parameter_default_value(RID p_instance, const StringName &p_parameter) const;
 
+	virtual void instance_geometry_set_userdata_ofs(RID p_instance, uint32_t p_ofs);
+	virtual void set_instance_userdata_rd_rid(RID p_buffer);
+	virtual RID get_instance_userdata_rd_rid() const;
+
 	virtual void mesh_generate_pipelines(RID p_mesh, bool p_background_compilation);
 	virtual uint32_t get_pipeline_compilations(RSE::PipelineSource p_source);
 

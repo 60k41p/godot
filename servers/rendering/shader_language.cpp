@@ -7357,8 +7357,18 @@ ShaderLanguage::Node *ShaderLanguage::_parse_expression(BlockNode *p_block, cons
 							}
 							break;
 						default: {
-							_set_error(vformat(RTR("An object of type '%s' can't be indexed."), (expr->get_datatype() == TYPE_STRUCT ? expr->get_datatype_name() : get_datatype_name(expr->get_datatype()))));
-							return nullptr;
+							if (expr->type == Node::NODE_TYPE_VARIABLE) {
+								VariableNode *idnode = static_cast<VariableNode *>(expr);
+								if (idnode->name == "INSTANCE_EXTRA") {
+									member_type = TYPE_VEC4;
+								} else {
+									_set_error(vformat(RTR("An object of type '%s' can't be indexed."), (expr->get_datatype() == TYPE_STRUCT ? expr->get_datatype_name() : get_datatype_name(expr->get_datatype()))));
+									return nullptr;
+								}
+							} else {
+								_set_error(vformat(RTR("An object of type '%s' can't be indexed."), (expr->get_datatype() == TYPE_STRUCT ? expr->get_datatype_name() : get_datatype_name(expr->get_datatype()))));
+								return nullptr;
+							}
 						}
 					}
 				}

@@ -3244,6 +3244,10 @@ void RenderingServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("instance_geometry_get_shader_parameter_default_value", "instance", "parameter"), &RenderingServer::instance_geometry_get_shader_parameter_default_value);
 	ClassDB::bind_method(D_METHOD("instance_geometry_get_shader_parameter_list", "instance"), &RenderingServer::_instance_geometry_get_shader_parameter_list);
 
+	ClassDB::bind_method(D_METHOD("instance_geometry_set_userdata_ofs", "instance", "ofs"), &RenderingServer::instance_geometry_set_userdata_ofs);
+	ClassDB::bind_method(D_METHOD("set_instance_userdata_rd_rid", "buffer"), &RenderingServer::set_instance_userdata_rd_rid);
+	ClassDB::bind_method(D_METHOD("get_instance_userdata_rd_rid"), &RenderingServer::get_instance_userdata_rd_rid);
+
 	ClassDB::bind_method(D_METHOD("instances_cull_aabb", "aabb", "scenario"), &RenderingServer::_instances_cull_aabb_bind, DEFVAL(RID()));
 	ClassDB::bind_method(D_METHOD("instances_cull_ray", "from", "to", "scenario"), &RenderingServer::_instances_cull_ray_bind, DEFVAL(RID()));
 	ClassDB::bind_method(D_METHOD("instances_cull_convex", "convex", "scenario"), &RenderingServer::_instances_cull_convex_bind, DEFVAL(RID()));

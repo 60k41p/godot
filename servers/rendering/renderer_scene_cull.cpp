@@ -1570,6 +1570,25 @@ void RendererSceneCull::instance_geometry_set_shader_parameter(RID p_instance, c
 	instance->instance_uniforms.set(instance->self, p_parameter, p_value);
 }
 
+void RendererSceneCull::instance_geometry_set_userdata_ofs(RID p_instance, uint32_t p_ofs) {
+	Instance *instance = instance_owner.get_or_null(p_instance);
+	ERR_FAIL_NULL(instance);
+
+	if ((1 << instance->base_type) & RSE::INSTANCE_GEOMETRY_MASK && instance->base_data) {
+		InstanceGeometryData *geom = static_cast<InstanceGeometryData *>(instance->base_data);
+		ERR_FAIL_NULL(geom->geometry_instance);
+		geom->geometry_instance->set_instance_userdata_ofs(p_ofs);
+	}
+}
+
+void RendererSceneCull::set_instance_userdata_rd_rid(RID p_buffer) {
+	RSG::material_storage->set_instance_userdata_rd_rid(p_buffer);
+}
+
+RID RendererSceneCull::get_instance_userdata_rd_rid() const {
+	return RSG::material_storage->get_instance_userdata_rd_rid();
+}
+
 Variant RendererSceneCull::instance_geometry_get_shader_parameter(RID p_instance, const StringName &p_parameter) const {
 	const Instance *instance = instance_owner.get_or_null(p_instance);
 	ERR_FAIL_NULL_V(instance, Variant());

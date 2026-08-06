@@ -128,6 +128,12 @@ void RenderGeometryInstanceBase::set_instance_shader_uniforms_offset(int32_t p_o
 	_mark_dirty();
 }
 
+void RenderGeometryInstanceBase::set_instance_userdata_ofs(uint32_t p_ofs) {
+	instance_userdata_ofs = p_ofs;
+
+	_mark_dirty();
+}
+
 void RenderGeometryInstanceBase::set_cast_double_sided_shadows(bool p_enable) {
 	data->cast_double_sided_shadows = p_enable;
 

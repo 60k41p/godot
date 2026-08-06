@@ -926,7 +926,11 @@ String ShaderCompiler::_dump_node_code(const SL::Node *p_node, int p_level, Gene
 				used_flag_pointers.insert(vnode->name);
 			}
 
-			if (p_default_actions.renames.has(vnode->name)) {
+			if (vnode->name == "INSTANCE_EXTRA") {
+				if (!p_default_actions.instance_userdata_index_variable.is_empty()) {
+					code = vformat("instance_userdata.data[int(%s) + 0]", p_default_actions.instance_userdata_index_variable);
+				}
+			} else if (p_default_actions.renames.has(vnode->name)) {
 				code = p_default_actions.renames[vnode->name];
 			} else {
 				bool param_found = false;
@@ -1425,6 +1429,14 @@ String ShaderCompiler::_dump_node_code(const SL::Node *p_node, int p_level, Gene
 					}
 				} break;
 				case SL::OP_INDEX: {
+					if (onode->arguments[0]->type == SL::Node::NODE_TYPE_VARIABLE) {
+						SL::VariableNode *idnode = static_cast<SL::VariableNode *>(onode->arguments[0]);
+						if (idnode->name == "INSTANCE_EXTRA" && !p_default_actions.instance_userdata_index_variable.is_empty()) {
+							String idx = _dump_node_code(onode->arguments[1], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);
+							code = vformat("instance_userdata.data[int(%s) + int(%s)]", p_default_actions.instance_userdata_index_variable, idx);
+							break;
+						}
+					}
 					code += _dump_node_code(onode->arguments[0], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);
 					code += "[";
 					code += _dump_node_code(onode->arguments[1], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);
