@@ -133,11 +133,11 @@ public:
 	virtual RID box_shape_create() override;
 	virtual RID capsule_shape_create() override;
 	virtual RID cylinder_shape_create() override;
+	virtual RID ellipsoid_shape_create() override;
 	virtual RID convex_polygon_shape_create() override;
 	virtual RID concave_polygon_shape_create() override;
 	virtual RID heightmap_shape_create() override;
 	virtual RID custom_shape_create() override;
-	virtual RID ellipsoid_shape_create() override;
 
 	virtual void shape_set_data(RID p_shape, const Variant &p_data) override;
 	virtual Variant shape_get_data(RID p_shape) const override;

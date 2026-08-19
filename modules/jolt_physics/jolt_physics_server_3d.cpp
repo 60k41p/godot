@@ -107,6 +107,13 @@ RID JoltPhysicsServer3D::cylinder_shape_create() {
 	return rid;
 }
 
+RID JoltPhysicsServer3D::ellipsoid_shape_create() {
+	JoltShape3D *shape = memnew(JoltEllipsoidShape3D);
+	RID rid = shape_owner.make_rid(shape);
+	shape->set_rid(rid);
+	return rid;
+}
+
 RID JoltPhysicsServer3D::convex_polygon_shape_create() {
 	JoltShape3D *shape = memnew(JoltConvexPolygonShape3D);
 	RID rid = shape_owner.make_rid(shape);
@@ -130,13 +137,6 @@ RID JoltPhysicsServer3D::heightmap_shape_create() {
 
 RID JoltPhysicsServer3D::custom_shape_create() {
 	ERR_FAIL_V_MSG(RID(), "Custom shapes are not supported.");
-}
-
-RID JoltPhysicsServer3D::ellipsoid_shape_create() {
-	JoltShape3D *shape = memnew(JoltEllipsoidShape3D);
-	RID rid = shape_owner.make_rid(shape);
-	shape->set_rid(rid);
-	return rid;
 }
 
 void JoltPhysicsServer3D::shape_set_data(RID p_shape, const Variant &p_data) {

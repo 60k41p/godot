@@ -141,11 +141,11 @@ public:
 	virtual RID box_shape_create() override { return RID(); }
 	virtual RID capsule_shape_create() override { return RID(); }
 	virtual RID cylinder_shape_create() override { return RID(); }
+	virtual RID ellipsoid_shape_create() override { return RID(); }
 	virtual RID convex_polygon_shape_create() override { return RID(); }
 	virtual RID concave_polygon_shape_create() override { return RID(); }
 	virtual RID heightmap_shape_create() override { return RID(); }
 	virtual RID custom_shape_create() override { return RID(); }
-	virtual RID ellipsoid_shape_create() override { return RID(); }
 
 	virtual void shape_set_data(RID p_shape, const Variant &p_data) override {}
 	virtual void shape_set_custom_solver_bias(RID p_shape, real_t p_bias) override {}
