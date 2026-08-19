@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  jolt_custom_shape_type.h                                              */
+/*  jolt_ellipsoid_shape_3d.h                                             */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                             GODOT ENGINE                               */
@@ -30,16 +30,24 @@
 
 #pragma once
 
-#include <Jolt/Jolt.h>
+#include "jolt_shape_3d.h"
 
-#include <Jolt/Physics/Collision/Shape/Shape.h>
+class JoltEllipsoidShape3D final : public JoltShape3D {
+	Vector3 radii;
 
-namespace JoltCustomShapeSubType {
+	virtual JPH::ShapeRefC _build() const override;
 
-constexpr JPH::EShapeSubType OVERRIDE_USER_DATA = JPH::EShapeSubType::User1;
-constexpr JPH::EShapeSubType DOUBLE_SIDED = JPH::EShapeSubType::User2;
-constexpr JPH::EShapeSubType RAY = JPH::EShapeSubType::UserConvex1;
-constexpr JPH::EShapeSubType MOTION = JPH::EShapeSubType::UserConvex2;
-constexpr JPH::EShapeSubType ELLIPSOID = JPH::EShapeSubType::UserConvex3;
+public:
+	virtual ShapeType get_type() const override { return ShapeType::SHAPE_ELLIPSOID; }
+	virtual bool is_convex() const override { return true; }
 
-} // namespace JoltCustomShapeSubType
+	virtual Variant get_data() const override;
+	virtual void set_data(const Variant &p_data) override;
+
+	virtual float get_margin() const override { return 0.0f; }
+	virtual void set_margin(float p_margin) override {}
+
+	virtual AABB get_aabb() const override;
+
+	String to_string() const;
+};
