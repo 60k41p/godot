@@ -37,7 +37,7 @@
 Vector<Vector3> EllipsoidShape3D::get_debug_mesh_lines() const {
 	Vector<Vector3> points;
 
-	for (int i = 0; i <= 360; i++) {
+	for (int i = 0; i < 360; i++) {
 		float ra = Math::deg_to_rad((float)i);
 		float rb = Math::deg_to_rad((float)i + 1);
 		Point2 a = Vector2(Math::sin(ra), Math::cos(ra));
@@ -78,7 +78,7 @@ Ref<ArrayMesh> EllipsoidShape3D::get_debug_arraymesh_faces(const Color &p_modula
 }
 
 real_t EllipsoidShape3D::get_enclosing_radius() const {
-	return radii.length();
+	return radii[radii.max_axis_index()];
 }
 
 void EllipsoidShape3D::_update_shape() {

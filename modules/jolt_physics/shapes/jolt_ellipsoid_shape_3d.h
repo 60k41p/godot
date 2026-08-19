@@ -34,6 +34,7 @@
 
 class JoltEllipsoidShape3D final : public JoltShape3D {
 	Vector3 radii;
+	float margin = 0.04f;
 
 	virtual JPH::ShapeRefC _build() const override;
 
@@ -44,8 +45,8 @@ public:
 	virtual Variant get_data() const override;
 	virtual void set_data(const Variant &p_data) override;
 
-	virtual float get_margin() const override { return 0.0f; }
-	virtual void set_margin(float p_margin) override {}
+	virtual float get_margin() const override { return margin; }
+	virtual void set_margin(float p_margin) override;
 
 	virtual AABB get_aabb() const override;
 

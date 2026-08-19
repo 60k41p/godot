@@ -30,13 +30,17 @@
 
 #include "jolt_ellipsoid_shape_3d.h"
 
+#include "../jolt_project_settings.h"
 #include "../misc/jolt_type_conversions.h"
 #include "jolt_custom_ellipsoid_shape.h"
 
 JPH::ShapeRefC JoltEllipsoidShape3D::_build() const {
 	ERR_FAIL_COND_V_MSG(radii.x <= 0.0f || radii.y <= 0.0f || radii.z <= 0.0f, nullptr, vformat("Failed to build Jolt Physics ellipsoid shape with %s. Its radii must all be greater than 0. This shape belongs to %s.", to_string(), _owners_to_string()));
 
-	const JoltCustomEllipsoidShapeSettings shape_settings(to_jolt(radii));
+	const float min_radius = (float)radii[radii.min_axis_index()];
+	const float actual_margin = MIN(margin, min_radius * JoltProjectSettings::collision_margin_fraction);
+
+	const JoltCustomEllipsoidShapeSettings shape_settings(to_jolt(radii), actual_margin);
 	const JPH::ShapeSettings::ShapeResult shape_result = shape_settings.Create();
 	ERR_FAIL_COND_V_MSG(shape_result.HasError(), nullptr, vformat("Failed to build Jolt Physics ellipsoid shape with %s. It returned the following error: '%s'. This shape belongs to %s.", to_string(), to_godot(shape_result.GetError()), _owners_to_string()));
 
@@ -60,10 +64,20 @@ void JoltEllipsoidShape3D::set_data(const Variant &p_data) {
 	destroy();
 }
 
+void JoltEllipsoidShape3D::set_margin(float p_margin) {
+	if (unlikely(margin == p_margin)) {
+		return;
+	}
+
+	margin = p_margin;
+
+	destroy();
+}
+
 AABB JoltEllipsoidShape3D::get_aabb() const {
 	return AABB(-radii, radii * 2.0f);
 }
 
 String JoltEllipsoidShape3D::to_string() const {
-	return vformat("{radii=%v}", radii);
+	return vformat("{radii=%v margin=%f}", radii, margin);
 }

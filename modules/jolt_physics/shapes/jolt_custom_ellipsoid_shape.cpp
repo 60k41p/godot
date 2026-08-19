@@ -47,17 +47,24 @@ JPH::Vec3 get_ellipsoid_support(JPH::Vec3Arg p_radii, JPH::Vec3Arg p_direction) 
 
 } // namespace
 
-class JoltCustomEllipsoidShape::EllipsoidNoConvex final : public JPH::ConvexShape::Support {
+class JoltCustomEllipsoidShape::ErodedEllipsoid final : public JPH::ConvexShape::Support {
 public:
-	EllipsoidNoConvex(JPH::Vec3Arg p_radii, float p_convex_radius) :
+	ErodedEllipsoid(JPH::Vec3Arg p_radii, float p_convex_radius) :
 			radii(p_radii),
 			convex_radius(p_convex_radius) {
-		static_assert(sizeof(EllipsoidNoConvex) <= sizeof(JPH::ConvexShape::SupportBuffer), "Buffer size too small");
-		JPH_ASSERT(JPH::IsAligned(this, alignof(EllipsoidNoConvex)));
+		static_assert(sizeof(ErodedEllipsoid) <= sizeof(JPH::ConvexShape::SupportBuffer), "Buffer size too small");
+		JPH_ASSERT(JPH::IsAligned(this, alignof(ErodedEllipsoid)));
 	}
 
 	virtual JPH::Vec3 GetSupport(JPH::Vec3Arg p_direction) const override {
-		return get_ellipsoid_support(radii, p_direction);
+		JPH::Vec3 support = get_ellipsoid_support(radii, p_direction);
+
+		const float len = p_direction.Length();
+		if (len > 0.0f) {
+			support -= (convex_radius / len) * p_direction;
+		}
+
+		return support;
 	}
 
 	virtual float GetConvexRadius() const override {
@@ -69,24 +76,16 @@ private:
 	float convex_radius = 0.0f;
 };
 
-class JoltCustomEllipsoidShape::EllipsoidWithConvex final : public JPH::ConvexShape::Support {
+class JoltCustomEllipsoidShape::Ellipsoid final : public JPH::ConvexShape::Support {
 public:
-	EllipsoidWithConvex(JPH::Vec3Arg p_radii, float p_convex_radius) :
-			radii(p_radii),
-			convex_radius(p_convex_radius) {
-		static_assert(sizeof(EllipsoidWithConvex) <= sizeof(JPH::ConvexShape::SupportBuffer), "Buffer size too small");
-		JPH_ASSERT(JPH::IsAligned(this, alignof(EllipsoidWithConvex)));
+	explicit Ellipsoid(JPH::Vec3Arg p_radii) :
+			radii(p_radii) {
+		static_assert(sizeof(Ellipsoid) <= sizeof(JPH::ConvexShape::SupportBuffer), "Buffer size too small");
+		JPH_ASSERT(JPH::IsAligned(this, alignof(Ellipsoid)));
 	}
 
 	virtual JPH::Vec3 GetSupport(JPH::Vec3Arg p_direction) const override {
-		JPH::Vec3 support = get_ellipsoid_support(radii, p_direction);
-
-		const float len = p_direction.Length();
-		if (len > 0.0f) {
-			support += (convex_radius / len) * p_direction;
-		}
-
-		return support;
+		return get_ellipsoid_support(radii, p_direction);
 	}
 
 	virtual float GetConvexRadius() const override {
@@ -95,16 +94,9 @@ public:
 
 private:
 	JPH::Vec3 radii = JPH::Vec3::sZero();
-	float convex_radius = 0.0f;
 };
 
 JPH::ShapeSettings::ShapeResult JoltCustomEllipsoidShapeSettings::Create() const {
-	if (radii.GetX() <= 0.0f || radii.GetY() <= 0.0f || radii.GetZ() <= 0.0f || convex_radius < 0.0f || radii.ReduceMin() <= convex_radius) {
-		JPH::ShapeSettings::ShapeResult result;
-		result.SetError("Invalid radii or convex radius");
-		return result;
-	}
-
 	JPH::ShapeSettings::ShapeResult result;
 	new JoltCustomEllipsoidShape(*this, result);
 	return result;
@@ -113,9 +105,14 @@ JPH::ShapeSettings::ShapeResult JoltCustomEllipsoidShapeSettings::Create() const
 JoltCustomEllipsoidShape::JoltCustomEllipsoidShape(const JoltCustomEllipsoidShapeSettings &p_settings, JPH::Shape::ShapeResult &p_result) :
 		JPH::ConvexShape(JoltCustomShapeSubType::ELLIPSOID, p_settings, p_result),
 		radii(p_settings.radii),
-		convex_radius(p_settings.convex_radius) {
-	if (radii.GetX() <= 0.0f || radii.GetY() <= 0.0f || radii.GetZ() <= 0.0f || convex_radius < 0.0f || radii.ReduceMin() <= convex_radius) {
-		p_result.SetError("Invalid radii or convex radius");
+		convex_radius(JPH::min(p_settings.convex_radius, p_settings.radii.ReduceMin())) {
+	if (p_settings.radii.ReduceMin() <= 0.0f) {
+		p_result.SetError("Invalid radii");
+		return;
+	}
+
+	if (p_settings.convex_radius < 0.0f) {
+		p_result.SetError("Invalid convex radius");
 		return;
 	}
 
@@ -123,8 +120,7 @@ JoltCustomEllipsoidShape::JoltCustomEllipsoidShape(const JoltCustomEllipsoidShap
 }
 
 JPH::AABox JoltCustomEllipsoidShape::GetLocalBounds() const {
-	const JPH::Vec3 extent = radii + JPH::Vec3::sReplicate(convex_radius);
-	return JPH::AABox(-extent, extent);
+	return JPH::AABox(-radii, radii);
 }
 
 JPH::MassProperties JoltCustomEllipsoidShape::GetMassProperties() const {
@@ -153,11 +149,13 @@ const JPH::ConvexShape::Support *JoltCustomEllipsoidShape::GetSupportFunction(JP
 
 	switch (p_mode) {
 		case JPH::ConvexShape::ESupportMode::IncludeConvexRadius:
-			return new (&p_buffer) EllipsoidWithConvex(scaled_radii, convex_radius);
-
-		case JPH::ConvexShape::ESupportMode::ExcludeConvexRadius:
 		case JPH::ConvexShape::ESupportMode::Default:
-			return new (&p_buffer) EllipsoidNoConvex(scaled_radii, convex_radius);
+			return new (&p_buffer) Ellipsoid(scaled_radii);
+
+		case JPH::ConvexShape::ESupportMode::ExcludeConvexRadius: {
+			const float scaled_convex_radius = JPH::ScaleHelpers::ScaleConvexRadius(convex_radius, p_scale);
+			return new (&p_buffer) ErodedEllipsoid(scaled_radii, scaled_convex_radius);
+		}
 	}
 
 	JPH_ASSERT(false);

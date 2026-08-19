@@ -53,8 +53,8 @@ public:
 };
 
 class JoltCustomEllipsoidShape final : public JPH::ConvexShape {
-	class EllipsoidNoConvex;
-	class EllipsoidWithConvex;
+	class ErodedEllipsoid;
+	class Ellipsoid;
 
 public:
 	JPH_OVERRIDE_NEW_DELETE
@@ -67,7 +67,7 @@ public:
 
 	virtual JPH::AABox GetLocalBounds() const override;
 
-	virtual float GetInnerRadius() const override { return convex_radius; }
+	virtual float GetInnerRadius() const override { return radii.ReduceMin(); }
 
 	virtual JPH::MassProperties GetMassProperties() const override;
 
