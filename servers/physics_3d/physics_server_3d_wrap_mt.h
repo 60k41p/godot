@@ -87,11 +87,11 @@ public:
 	FUNCRID(box_shape)
 	FUNCRID(capsule_shape)
 	FUNCRID(cylinder_shape)
-	FUNCRID(ellipsoid_shape)
 	FUNCRID(convex_polygon_shape)
 	FUNCRID(concave_polygon_shape)
 	FUNCRID(heightmap_shape)
 	FUNCRID(custom_shape)
+	FUNCRID(ellipsoid_shape)
 
 	FUNC2(shape_set_data, RID, const Variant &);
 	FUNC2(shape_set_custom_solver_bias, RID, real_t);

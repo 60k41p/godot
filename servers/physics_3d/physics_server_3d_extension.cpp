@@ -145,11 +145,11 @@ void PhysicsServer3DExtension::_bind_methods() {
 	GDVIRTUAL_BIND(_box_shape_create);
 	GDVIRTUAL_BIND(_capsule_shape_create);
 	GDVIRTUAL_BIND(_cylinder_shape_create);
-	GDVIRTUAL_BIND(_ellipsoid_shape_create);
 	GDVIRTUAL_BIND(_convex_polygon_shape_create);
 	GDVIRTUAL_BIND(_concave_polygon_shape_create);
 	GDVIRTUAL_BIND(_heightmap_shape_create);
 	GDVIRTUAL_BIND(_custom_shape_create);
+	GDVIRTUAL_BIND(_ellipsoid_shape_create);
 
 	GDVIRTUAL_BIND(_shape_set_data, "shape", "data");
 	GDVIRTUAL_BIND(_shape_set_custom_solver_bias, "shape", "bias");

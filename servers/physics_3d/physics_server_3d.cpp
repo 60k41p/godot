@@ -682,8 +682,6 @@ RID PhysicsServer3D::shape_create(ShapeType p_shape) {
 			return capsule_shape_create();
 		case SHAPE_CYLINDER:
 			return cylinder_shape_create();
-		case SHAPE_ELLIPSOID:
-			return ellipsoid_shape_create();
 		case SHAPE_CONVEX_POLYGON:
 			return convex_polygon_shape_create();
 		case SHAPE_CONCAVE_POLYGON:
@@ -692,6 +690,8 @@ RID PhysicsServer3D::shape_create(ShapeType p_shape) {
 			return heightmap_shape_create();
 		case SHAPE_CUSTOM:
 			return custom_shape_create();
+		case SHAPE_ELLIPSOID:
+			return ellipsoid_shape_create();
 		default:
 			return RID();
 	}
