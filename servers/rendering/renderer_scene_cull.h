@@ -441,6 +441,8 @@ public:
 		AABB prev_transformed_aabb;
 
 		InstanceUniforms instance_uniforms;
+		uint32_t instance_custom_id = 0;
+		uint32_t instance_userdata_offset = 0;
 
 		//
 
@@ -1031,6 +1033,7 @@ public:
 	virtual void instance_set_transform(RID p_instance, const Transform3D &p_transform);
 	virtual void instance_attach_object_instance_id(RID p_instance, ObjectID p_id);
 	virtual void instance_set_blend_shape_weight(RID p_instance, int p_shape, float p_weight);
+	virtual void instance_set_custom_id(RID p_instance, uint32_t p_id);
 	virtual void instance_set_surface_override_material(RID p_instance, int p_surface, RID p_material);
 	virtual void instance_set_visible(RID p_instance, bool p_visible);
 	virtual void instance_geometry_set_transparency(RID p_instance, float p_transparency);
@@ -1069,6 +1072,10 @@ public:
 	virtual void instance_geometry_get_shader_parameter_list(RID p_instance, List<PropertyInfo> *p_parameters) const;
 	virtual Variant instance_geometry_get_shader_parameter(RID p_instance, const StringName &p_parameter) const;
 	virtual Variant instance_geometry_get_shader_parameter_default_value(RID p_instance, const StringName &p_parameter) const;
+
+	virtual void instance_geometry_set_userdata_offset(RID p_instance, uint32_t p_offset);
+	virtual void set_instance_userdata_rd_rid(RID p_buffer);
+	virtual RID get_instance_userdata_rd_rid() const;
 
 	virtual void mesh_generate_pipelines(RID p_mesh, bool p_background_compilation);
 	virtual uint32_t get_pipeline_compilations(RSE::PipelineSource p_source);

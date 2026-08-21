@@ -60,6 +60,8 @@ public:
 	virtual void set_use_lightmap(RID p_lightmap_instance, const Rect2 &p_lightmap_uv_scale, int p_lightmap_slice_index) = 0;
 	virtual void set_lightmap_capture(const Color *p_sh9) = 0;
 	virtual void set_instance_shader_uniforms_offset(int32_t p_offset) = 0;
+	virtual void set_instance_userdata_offset(uint32_t p_offset) = 0;
+	virtual void set_instance_custom_id(uint32_t p_id) = 0;
 	virtual void set_cast_double_sided_shadows(bool p_enable) = 0;
 
 	virtual void reset_motion_vectors() = 0;
@@ -110,6 +112,8 @@ public:
 	float force_alpha = 1.0;
 
 	int32_t shader_uniforms_offset = -1;
+	uint32_t instance_custom_id = 0;
+	uint32_t instance_userdata_offset = 0;
 
 	struct Data {
 		//data used less often goes into regular heap
@@ -147,6 +151,8 @@ public:
 	virtual void set_use_baked_light(bool p_enable) override;
 	virtual void set_use_dynamic_gi(bool p_enable) override;
 	virtual void set_instance_shader_uniforms_offset(int32_t p_offset) override;
+	virtual void set_instance_userdata_offset(uint32_t p_offset) override;
+	virtual void set_instance_custom_id(uint32_t p_id) override;
 	virtual void set_cast_double_sided_shadows(bool p_enable) override;
 
 	virtual void reset_motion_vectors() override;

@@ -738,6 +738,8 @@ void RendererSceneCull::instance_set_base(RID p_instance, RID p_base) {
 				geom->geometry_instance->set_use_dynamic_gi(instance->dynamic_gi);
 				geom->geometry_instance->set_use_lightmap(RID(), instance->lightmap_uv_scale, instance->lightmap_slice_index);
 				geom->geometry_instance->set_instance_shader_uniforms_offset(instance->instance_uniforms.location());
+				geom->geometry_instance->set_instance_custom_id(instance->instance_custom_id);
+				geom->geometry_instance->set_instance_userdata_offset(instance->instance_userdata_offset);
 				geom->geometry_instance->set_cast_double_sided_shadows(instance->cast_shadows == RSE::SHADOW_CASTING_SETTING_DOUBLE_SIDED);
 				if (instance->lightmap_sh.size() == 9) {
 					geom->geometry_instance->set_lightmap_capture(instance->lightmap_sh.ptr());
@@ -1025,6 +1027,32 @@ void RendererSceneCull::instance_set_blend_shape_weight(RID p_instance, int p_sh
 	}
 
 	_instance_queue_update(instance, false, false);
+}
+
+void RendererSceneCull::instance_set_custom_id(RID p_instance, uint32_t p_id) {
+	Instance *instance = instance_owner.get_or_null(p_instance);
+	ERR_FAIL_NULL(instance);
+
+	instance->instance_custom_id = p_id;
+
+	_instance_queue_update(instance, false, false);
+}
+
+void RendererSceneCull::instance_geometry_set_userdata_offset(RID p_instance, uint32_t p_offset) {
+	Instance *instance = instance_owner.get_or_null(p_instance);
+	ERR_FAIL_NULL(instance);
+
+	instance->instance_userdata_offset = p_offset;
+
+	_instance_queue_update(instance, false, false);
+}
+
+void RendererSceneCull::set_instance_userdata_rd_rid(RID p_buffer) {
+	RSG::material_storage->set_instance_userdata_rd_rid(p_buffer);
+}
+
+RID RendererSceneCull::get_instance_userdata_rd_rid() const {
+	return RSG::material_storage->get_instance_userdata_rd_rid();
 }
 
 void RendererSceneCull::instance_set_surface_override_material(RID p_instance, int p_surface, RID p_material) {
@@ -4330,6 +4358,10 @@ void RendererSceneCull::_update_dirty_instance(Instance *p_instance) const {
 			if (p_instance->instance_uniforms.materials_finish(p_instance->self)) {
 				geom->geometry_instance->set_instance_shader_uniforms_offset(p_instance->instance_uniforms.location());
 			}
+
+			geom->geometry_instance->set_instance_custom_id(p_instance->instance_custom_id);
+
+			geom->geometry_instance->set_instance_userdata_offset(p_instance->instance_userdata_offset);
 		}
 
 		if (p_instance->skeleton.is_valid()) {

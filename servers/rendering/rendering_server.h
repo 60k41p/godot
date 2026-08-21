@@ -732,6 +732,7 @@ public:
 	virtual void instance_set_transform(RID p_instance, const Transform3D &p_transform) = 0;
 	virtual void instance_attach_object_instance_id(RID p_instance, ObjectID p_id) = 0;
 	virtual void instance_set_blend_shape_weight(RID p_instance, int p_shape, float p_weight) = 0;
+	virtual void instance_set_custom_id(RID p_instance, uint32_t p_id) = 0;
 	virtual void instance_set_surface_override_material(RID p_instance, int p_surface, RID p_material) = 0;
 	virtual void instance_set_visible(RID p_instance, bool p_visible) = 0;
 
@@ -768,6 +769,11 @@ public:
 	virtual Variant instance_geometry_get_shader_parameter(RID p_instance, const StringName &) const = 0;
 	virtual Variant instance_geometry_get_shader_parameter_default_value(RID p_instance, const StringName &) const = 0;
 	virtual void instance_geometry_get_shader_parameter_list(RID p_instance, List<PropertyInfo> *p_parameters) const = 0;
+
+	virtual void instance_geometry_set_userdata_offset(RID p_instance, uint32_t p_offset) = 0;
+
+	virtual void set_instance_userdata_rd_rid(RID p_buffer) = 0;
+	virtual RID get_instance_userdata_rd_rid() const = 0;
 
 	/* BAKE API */
 

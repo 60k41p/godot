@@ -333,6 +333,11 @@ layout(set = 0, binding = 16) uniform sampler2D ltc_lut2;
 
 layout(set = 0, binding = 17) uniform texture2D area_light_atlas;
 
+layout(set = 0, binding = 18, std430) restrict readonly buffer InstanceUserdata {
+	vec4 data[];
+}
+instance_userdata;
+
 /* Set 1: Render Pass (changes per render pass) */
 
 layout(set = 1, binding = 0, std140) uniform SceneDataBlock {
@@ -348,6 +353,8 @@ struct InstanceData {
 	vec4 uv_scale;
 	uint flags;
 	uint instance_uniforms_ofs; // Base offset in global buffer for instance variables.
+	uint custom_id; // Stable user-controlled per-instance identifier.
+	uint instance_userdata_offset; // Base offset in userdata buffer for per-instance user data.
 	uint gi_offset; // GI information when using lightmapping (VCT or lightmap index).
 	uint layer_mask;
 	highp mat3x4 prev_transform;

@@ -221,8 +221,11 @@ private:
 			float uv_scale[4];
 			uint32_t flags;
 			uint32_t instance_uniforms_ofs; // Base offset in global buffer for instance variables.
+			uint32_t custom_id; // Stable user-controlled per-instance identifier.
+			uint32_t instance_userdata_offset; // Base offset in userdata buffer for per-instance user data.
 			uint32_t gi_offset; // GI information when using lightmapping (VCT or lightmap index).
 			uint32_t layer_mask;
+			uint32_t padding_userdata[2]; // padding for std430 mat3x4 alignment
 			float prev_transform[12];
 			float lightmap_uv_scale[4]; // Doubles as uv_offset when needed.
 			uint32_t reflection_probes[2]; // Packed reflection probes.
@@ -281,6 +284,7 @@ private:
 
 		static_assert(std::is_trivially_destructible_v<InstanceData>);
 		static_assert(std::is_trivially_constructible_v<InstanceData>);
+		static_assert(sizeof(InstanceData) == 240, "InstanceData struct size mismatch - check std430 alignment");
 
 		MultiUmaBuffer<1u> instance_buffer[RENDER_LIST_MAX] = { MultiUmaBuffer<1u>("RENDER_LIST_OPAQUE"), MultiUmaBuffer<1u>("RENDER_LIST_ALPHA"), MultiUmaBuffer<1u>("RENDER_LIST_SECONDARY") };
 		InstanceData *curr_gpu_ptr[RENDER_LIST_MAX] = {};

@@ -846,6 +846,8 @@ void SceneShaderForwardMobile::init(const String p_defines) {
 		actions.default_repeat = ShaderLanguage::REPEAT_ENABLE;
 		actions.global_buffer_array_variable = "global_shader_uniforms.data";
 		actions.instance_uniform_index_variable = "instances.data[draw_call.instance_index].instance_uniforms_ofs";
+		actions.instance_custom_id_variable = "instances.data[draw_call.instance_index].custom_id";
+		actions.instance_userdata_index_variable = "instances.data[draw_call.instance_index].instance_userdata_offset";
 
 		actions.apply_luminance_multiplier = true; // apply luminance multiplier to screen texture
 		actions.check_multiview_samplers = true;
