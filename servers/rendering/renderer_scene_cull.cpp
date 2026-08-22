@@ -1033,6 +1033,10 @@ void RendererSceneCull::instance_set_custom_id(RID p_instance, uint32_t p_id) {
 	Instance *instance = instance_owner.get_or_null(p_instance);
 	ERR_FAIL_NULL(instance);
 
+	if (instance->instance_custom_id == p_id) {
+		return;
+	}
+
 	instance->instance_custom_id = p_id;
 
 	_instance_queue_update(instance, false, false);
@@ -1041,6 +1045,10 @@ void RendererSceneCull::instance_set_custom_id(RID p_instance, uint32_t p_id) {
 void RendererSceneCull::instance_geometry_set_userdata_offset(RID p_instance, uint32_t p_offset) {
 	Instance *instance = instance_owner.get_or_null(p_instance);
 	ERR_FAIL_NULL(instance);
+
+	if (instance->instance_userdata_offset == p_offset) {
+		return;
+	}
 
 	instance->instance_userdata_offset = p_offset;
 
@@ -4358,10 +4366,6 @@ void RendererSceneCull::_update_dirty_instance(Instance *p_instance) const {
 			if (p_instance->instance_uniforms.materials_finish(p_instance->self)) {
 				geom->geometry_instance->set_instance_shader_uniforms_offset(p_instance->instance_uniforms.location());
 			}
-
-			geom->geometry_instance->set_instance_custom_id(p_instance->instance_custom_id);
-
-			geom->geometry_instance->set_instance_userdata_offset(p_instance->instance_userdata_offset);
 		}
 
 		if (p_instance->skeleton.is_valid()) {
@@ -4375,6 +4379,13 @@ void RendererSceneCull::_update_dirty_instance(Instance *p_instance) const {
 			ERR_FAIL_NULL(geom->geometry_instance);
 			geom->geometry_instance->set_surface_materials(p_instance->materials);
 		}
+	}
+
+	if ((1 << p_instance->base_type) & RSE::INSTANCE_GEOMETRY_MASK) {
+		InstanceGeometryData *geom = static_cast<InstanceGeometryData *>(p_instance->base_data);
+		ERR_FAIL_NULL(geom->geometry_instance);
+		geom->geometry_instance->set_instance_custom_id(p_instance->instance_custom_id);
+		geom->geometry_instance->set_instance_userdata_offset(p_instance->instance_userdata_offset);
 	}
 
 	_instance_update_list.remove(&p_instance->update_item);

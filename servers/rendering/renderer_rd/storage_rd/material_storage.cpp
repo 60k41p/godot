@@ -1510,7 +1510,7 @@ MaterialStorage::MaterialStorage() {
 	// Instance userdata buffer (default: 16 bytes = 1 vec4 zeroed)
 	default_instance_userdata_buffer = RD::get_singleton()->storage_buffer_create(16);
 	uint32_t zero_data[4] = { 0, 0, 0, 0 };
-	RD::get_singleton()->buffer_update(default_instance_userdata_buffer, 0, 16, zero_data, 16);
+	RD::get_singleton()->buffer_update(default_instance_userdata_buffer, 0, 16, zero_data);
 	instance_userdata_buffer = RID();
 }
 

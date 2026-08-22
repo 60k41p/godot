@@ -395,7 +395,11 @@ private:
 
 		static_assert(std::is_trivially_destructible_v<InstanceData>);
 		static_assert(std::is_trivially_constructible_v<InstanceData>);
+#ifdef REAL_T_IS_DOUBLE
+		static_assert(sizeof(InstanceData) == 224, "InstanceData struct size mismatch - check std430 alignment");
+#else
 		static_assert(sizeof(InstanceData) == 192, "InstanceData struct size mismatch - check std430 alignment");
+#endif
 
 		UBO ubo;
 

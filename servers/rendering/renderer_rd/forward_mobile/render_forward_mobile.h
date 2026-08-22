@@ -284,7 +284,11 @@ private:
 
 		static_assert(std::is_trivially_destructible_v<InstanceData>);
 		static_assert(std::is_trivially_constructible_v<InstanceData>);
+#ifdef REAL_T_IS_DOUBLE
+		static_assert(sizeof(InstanceData) == 272, "InstanceData struct size mismatch - check std430 alignment");
+#else
 		static_assert(sizeof(InstanceData) == 240, "InstanceData struct size mismatch - check std430 alignment");
+#endif
 
 		MultiUmaBuffer<1u> instance_buffer[RENDER_LIST_MAX] = { MultiUmaBuffer<1u>("RENDER_LIST_OPAQUE"), MultiUmaBuffer<1u>("RENDER_LIST_ALPHA"), MultiUmaBuffer<1u>("RENDER_LIST_SECONDARY") };
 		InstanceData *curr_gpu_ptr[RENDER_LIST_MAX] = {};
