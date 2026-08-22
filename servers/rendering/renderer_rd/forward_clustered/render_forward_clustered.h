@@ -338,8 +338,11 @@ private:
 			float uv_scale[4];
 			uint32_t flags;
 			uint32_t instance_uniforms_ofs; //base offset in global buffer for instance variables
+			uint32_t custom_id; //stable user-controlled per-instance identifier
+			uint32_t instance_userdata_offset; //base offset in userdata buffer for per-instance user data
 			uint32_t gi_offset; //GI information when using lightmapping (VCT or lightmap index)
 			uint32_t layer_mask;
+			uint32_t padding_userdata[2]; // padding for std430 mat3x4 alignment
 			float prev_transform[12];
 			float lightmap_uv_scale[4];
 #ifdef REAL_T_IS_DOUBLE
@@ -392,6 +395,11 @@ private:
 
 		static_assert(std::is_trivially_destructible_v<InstanceData>);
 		static_assert(std::is_trivially_constructible_v<InstanceData>);
+#ifdef REAL_T_IS_DOUBLE
+		static_assert(sizeof(InstanceData) == 224, "InstanceData struct size mismatch - check std430 alignment");
+#else
+		static_assert(sizeof(InstanceData) == 192, "InstanceData struct size mismatch - check std430 alignment");
+#endif
 
 		UBO ubo;
 

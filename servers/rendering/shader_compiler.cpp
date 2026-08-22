@@ -926,7 +926,19 @@ String ShaderCompiler::_dump_node_code(const SL::Node *p_node, int p_level, Gene
 				used_flag_pointers.insert(vnode->name);
 			}
 
-			if (p_default_actions.renames.has(vnode->name)) {
+			if (vnode->name == "INSTANCE_CUSTOM_ID") {
+				if (p_default_actions.instance_custom_id_variable.is_empty()) {
+					r_gen_code.error = "INSTANCE_CUSTOM_ID is not supported by the current renderer.";
+				} else {
+					code = p_default_actions.instance_custom_id_variable;
+				}
+			} else if (vnode->name == "INSTANCE_EXTRA") {
+				if (p_default_actions.instance_userdata_index_variable.is_empty()) {
+					r_gen_code.error = "INSTANCE_EXTRA is not supported by the current renderer.";
+				} else {
+					code = vformat("instance_userdata.data[int(%s)]", p_default_actions.instance_userdata_index_variable);
+				}
+			} else if (p_default_actions.renames.has(vnode->name)) {
 				code = p_default_actions.renames[vnode->name];
 			} else {
 				bool param_found = false;
@@ -1425,6 +1437,14 @@ String ShaderCompiler::_dump_node_code(const SL::Node *p_node, int p_level, Gene
 					}
 				} break;
 				case SL::OP_INDEX: {
+					if (onode->arguments[0]->type == SL::Node::NODE_TYPE_VARIABLE) {
+						SL::VariableNode *idnode = static_cast<SL::VariableNode *>(onode->arguments[0]);
+						if (idnode->name == "INSTANCE_EXTRA" && !p_default_actions.instance_userdata_index_variable.is_empty()) {
+							String idx = _dump_node_code(onode->arguments[1], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);
+							code = vformat("instance_userdata.data[int(%s) + int(%s)]", p_default_actions.instance_userdata_index_variable, idx);
+							break;
+						}
+					}
 					code += _dump_node_code(onode->arguments[0], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);
 					code += "[";
 					code += _dump_node_code(onode->arguments[1], p_level, r_gen_code, p_actions, p_default_actions, p_assigning);
@@ -1644,6 +1664,7 @@ Error ShaderCompiler::compile(RSE::ShaderMode p_mode, const String &p_code, Iden
 	r_gen_code.uses_screen_texture = false;
 	r_gen_code.uses_depth_texture = false;
 	r_gen_code.uses_normal_roughness_texture = false;
+	r_gen_code.error = String();
 
 	used_name_defines.clear();
 	used_rmode_defines.clear();
@@ -1654,6 +1675,11 @@ Error ShaderCompiler::compile(RSE::ShaderMode p_mode, const String &p_code, Iden
 	function = nullptr;
 	// Return value only relevant within nested calls.
 	_ALLOW_DISCARD_ _dump_node_code(shader, 1, r_gen_code, *p_actions, actions, false);
+
+	if (!r_gen_code.error.is_empty()) {
+		_err_print_error(nullptr, p_path.utf8().get_data(), -1, r_gen_code.error.utf8().get_data(), false, ERR_HANDLER_SHADER);
+		return ERR_PARSE_ERROR;
+	}
 
 	return OK;
 }

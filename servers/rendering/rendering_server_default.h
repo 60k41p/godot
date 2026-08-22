@@ -941,6 +941,7 @@ public:
 	FUNC2(instance_set_transform, RID, const Transform3D &)
 	FUNC2(instance_attach_object_instance_id, RID, ObjectID)
 	FUNC3(instance_set_blend_shape_weight, RID, int, float)
+	FUNC2(instance_set_custom_id, RID, uint32_t)
 	FUNC3(instance_set_surface_override_material, RID, int, RID)
 	FUNC2(instance_set_visible, RID, bool)
 
@@ -973,6 +974,10 @@ public:
 	FUNC2RC(Variant, instance_geometry_get_shader_parameter, RID, const StringName &)
 	FUNC2RC(Variant, instance_geometry_get_shader_parameter_default_value, RID, const StringName &)
 	FUNC2SC(instance_geometry_get_shader_parameter_list, RID, List<PropertyInfo> *)
+
+	FUNC2(instance_geometry_set_userdata_offset, RID, uint32_t)
+	FUNC1(set_instance_userdata_rd_rid, RID)
+	FUNC0RC(RID, get_instance_userdata_rd_rid)
 
 	FUNC3R(TypedArray<Image>, bake_render_uv2, RID, const TypedArray<RID> &, const Size2i &)
 	FUNC4R(PackedByteArray, bake_render_area_light_atlas, const TypedArray<RID> &, const TypedArray<Rect2> &, const Size2i &, int)

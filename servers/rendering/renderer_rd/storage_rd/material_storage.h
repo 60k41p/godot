@@ -196,6 +196,11 @@ private:
 	RID quad_index_buffer;
 	RID quad_index_array;
 
+	/* INSTANCE USERDATA API */
+
+	RID instance_userdata_buffer;
+	RID default_instance_userdata_buffer;
+
 	/* GLOBAL SHADER UNIFORM API */
 
 	struct GlobalShaderUniforms {
@@ -455,6 +460,9 @@ public:
 	virtual void global_shader_parameters_instance_update(RID p_instance, int p_index, const Variant &p_value, int p_flags_count = 0) override;
 
 	RID global_shader_uniforms_get_storage_buffer() const;
+
+	virtual void set_instance_userdata_rd_rid(RID p_buffer) override;
+	virtual RID get_instance_userdata_rd_rid() const override;
 
 	/* SHADER API */
 

@@ -101,4 +101,7 @@ public:
 	virtual void material_get_instance_shader_parameters(RID p_material, List<InstanceShaderParam> *r_parameters) = 0;
 
 	virtual void material_update_dependency(RID p_material, DependencyTracker *p_instance) = 0;
+
+	virtual void set_instance_userdata_rd_rid(RID p_buffer) {}
+	virtual RID get_instance_userdata_rd_rid() const { return RID(); }
 };
