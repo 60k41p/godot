@@ -121,7 +121,7 @@ public:
 	virtual void instance_geometry_get_shader_parameter_list(RID p_instance, List<PropertyInfo> *p_parameters) const = 0;
 	virtual Variant instance_geometry_get_shader_parameter(RID p_instance, const StringName &p_parameter) const = 0;
 	virtual Variant instance_geometry_get_shader_parameter_default_value(RID p_instance, const StringName &p_parameter) const = 0;
-	virtual void instance_geometry_set_userdata_offset(RID p_instance, uint32_t p_offset) = 0;
+	virtual void instance_set_userdata_offset(RID p_instance, uint32_t p_offset) = 0;
 
 	virtual void set_instance_userdata_rd_rid(RID p_buffer) = 0;
 	virtual RID get_instance_userdata_rd_rid() const = 0;

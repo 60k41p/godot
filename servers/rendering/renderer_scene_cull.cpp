@@ -1042,7 +1042,7 @@ void RendererSceneCull::instance_set_custom_id(RID p_instance, uint32_t p_id) {
 	_instance_queue_update(instance, false, false);
 }
 
-void RendererSceneCull::instance_geometry_set_userdata_offset(RID p_instance, uint32_t p_offset) {
+void RendererSceneCull::instance_set_userdata_offset(RID p_instance, uint32_t p_offset) {
 	Instance *instance = instance_owner.get_or_null(p_instance);
 	ERR_FAIL_NULL(instance);
 
@@ -1060,7 +1060,7 @@ void RendererSceneCull::set_instance_userdata_rd_rid(RID p_buffer) {
 }
 
 RID RendererSceneCull::get_instance_userdata_rd_rid() const {
-	return RSG::material_storage->get_instance_userdata_rd_rid();
+	return RSG::material_storage->get_instance_userdata_buffer();
 }
 
 void RendererSceneCull::instance_set_surface_override_material(RID p_instance, int p_surface, RID p_material) {

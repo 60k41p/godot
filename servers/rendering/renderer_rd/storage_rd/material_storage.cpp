@@ -2038,6 +2038,8 @@ void MaterialStorage::set_instance_userdata_rd_rid(RID p_buffer) {
 	if (instance_userdata_buffer == p_buffer) {
 		return;
 	}
+	// The buffer is owned by the caller: it must remain valid for as long as it is
+	// registered (or until replaced). We never free it.
 	instance_userdata_buffer = p_buffer;
 
 	// Invalidate base uniform sets so the new buffer is bound next frame
@@ -2051,6 +2053,10 @@ RID MaterialStorage::get_instance_userdata_rd_rid() const {
 		return instance_userdata_buffer;
 	}
 	return default_instance_userdata_buffer;
+}
+
+RID MaterialStorage::get_instance_userdata_buffer() const {
+	return instance_userdata_buffer;
 }
 
 int32_t MaterialStorage::global_shader_parameters_instance_allocate(RID p_instance) {

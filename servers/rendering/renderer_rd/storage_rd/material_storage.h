@@ -463,6 +463,7 @@ public:
 
 	virtual void set_instance_userdata_rd_rid(RID p_buffer) override;
 	virtual RID get_instance_userdata_rd_rid() const override;
+	virtual RID get_instance_userdata_buffer() const override;
 
 	/* SHADER API */
 

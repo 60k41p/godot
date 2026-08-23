@@ -975,7 +975,7 @@ public:
 	FUNC2RC(Variant, instance_geometry_get_shader_parameter_default_value, RID, const StringName &)
 	FUNC2SC(instance_geometry_get_shader_parameter_list, RID, List<PropertyInfo> *)
 
-	FUNC2(instance_geometry_set_userdata_offset, RID, uint32_t)
+	FUNC2(instance_set_userdata_offset, RID, uint32_t)
 	FUNC1(set_instance_userdata_rd_rid, RID)
 	FUNC0RC(RID, get_instance_userdata_rd_rid)
 
