@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  jolt_custom_shape_type.h                                              */
+/*  ellipsoid_shape_3d.h                                                  */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                             GODOT ENGINE                               */
@@ -30,16 +30,24 @@
 
 #pragma once
 
-#include <Jolt/Jolt.h>
+#include "scene/resources/3d/shape_3d.h"
 
-#include <Jolt/Physics/Collision/Shape/Shape.h>
+class EllipsoidShape3D : public Shape3D {
+	GDCLASS(EllipsoidShape3D, Shape3D);
+	Vector3 radii = Vector3(0.5f, 0.5f, 0.5f);
 
-namespace JoltCustomShapeSubType {
+protected:
+	static void _bind_methods();
 
-constexpr JPH::EShapeSubType OVERRIDE_USER_DATA = JPH::EShapeSubType::User1;
-constexpr JPH::EShapeSubType DOUBLE_SIDED = JPH::EShapeSubType::User2;
-constexpr JPH::EShapeSubType RAY = JPH::EShapeSubType::UserConvex1;
-constexpr JPH::EShapeSubType MOTION = JPH::EShapeSubType::UserConvex2;
-constexpr JPH::EShapeSubType ELLIPSOID = JPH::EShapeSubType::UserConvex3;
+	virtual void _update_shape() override;
 
-} // namespace JoltCustomShapeSubType
+public:
+	void set_radii(const Vector3 &p_radii);
+	Vector3 get_radii() const;
+
+	virtual Vector<Vector3> get_debug_mesh_lines() const override;
+	virtual Ref<ArrayMesh> get_debug_arraymesh_faces(const Color &p_modulate) const override;
+	virtual real_t get_enclosing_radius() const override;
+
+	EllipsoidShape3D();
+};
