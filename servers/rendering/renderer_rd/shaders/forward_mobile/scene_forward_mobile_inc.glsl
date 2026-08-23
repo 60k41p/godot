@@ -14,10 +14,11 @@
 #define USING_MOBILE_RENDERER
 
 layout(push_constant, std430) uniform DrawCall {
-	uint uv_offset;
 	uint instance_index;
+	uint uv_offset;
 	uint multimesh_motion_vectors_current_offset;
 	uint multimesh_motion_vectors_previous_offset;
+	uint extra_data_stride;
 #ifdef UBERSHADER
 	uint sc_packed_0;
 	uint sc_packed_1;
@@ -422,5 +423,10 @@ layout(set = 2, binding = 0, std430) restrict readonly buffer Transforms {
 	vec4 data[];
 }
 transforms;
+
+layout(set = 2, binding = 1, std430) restrict readonly buffer InstanceExtra {
+	vec4 data[];
+}
+instance_extra_ssbo;
 
 /* Set 3 User Material */
