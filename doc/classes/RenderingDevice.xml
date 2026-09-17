@@ -391,6 +391,37 @@
 				Submits [param draw_list] for rendering on the GPU with the given parameters stored in the [param buffer] at [param offset]. Parameters being integers: vertex count, instance count, first vertex, first instance. And when using indices: index count, instance count, first index, vertex offset, first instance. Buffer must have been created with [constant STORAGE_BUFFER_USAGE_DISPATCH_INDIRECT] flag.
 			</description>
 		</method>
+		<method name="draw_list_dispatch_mesh">
+			<return type="void" />
+			<param index="0" name="draw_list" type="int" />
+			<param index="1" name="x_groups" type="int" />
+			<param index="2" name="y_groups" type="int" />
+			<param index="3" name="z_groups" type="int" />
+			<description>
+				Submits [param draw_list] for rendering on the GPU, using bound render pipeline with mesh task or mesh shader. You must ensure that the GPU supports this functionality by calling [method has_feature] with [constant SUPPORTS_MESH_SHADER] as a parameter.
+			</description>
+		</method>
+		<method name="draw_list_dispatch_mesh_indirect">
+			<return type="void" />
+			<param index="0" name="draw_list" type="int" />
+			<param index="1" name="buffer" type="RID" />
+			<param index="2" name="offset" type="int" />
+			<description>
+				Submits [param draw_list] for rendering on the GPU with the given group counts stored in the [param buffer] at [param offset]. Buffer must have been created with [constant STORAGE_BUFFER_USAGE_DISPATCH_INDIRECT] flag. Equivalent to [method draw_list_dispatch_mesh].
+			</description>
+		</method>
+		<method name="draw_list_dispatch_mesh_indirect_count">
+			<return type="void" />
+			<param index="0" name="draw_list" type="int" />
+			<param index="1" name="buffer" type="RID" />
+			<param index="2" name="offset" type="int" />
+			<param index="3" name="count_buffer" type="RID" />
+			<param index="4" name="count_buffer_offset" type="int" />
+			<param index="5" name="max_draw_count" type="int" />
+			<description>
+				Submits [param draw_list] for rendering on the GPU with the given group counts stored in the [param buffer] at [param offset], with the actual draw count stored in [param count_buffer]. Equivalent to [method draw_list_dispatch_mesh].
+			</description>
+		</method>
 		<method name="draw_list_enable_scissor">
 			<return type="void" />
 			<param index="0" name="draw_list" type="int" />
@@ -2774,7 +2805,13 @@
 		<constant name="SHADER_STAGE_INTERSECTION" value="9" enum="ShaderStage">
 			Intersection shader stage. The intersection shader for triangles is built-in. This can be used to compute ray intersections with primitives that are not triangles.
 		</constant>
-		<constant name="SHADER_STAGE_MAX" value="10" enum="ShaderStage">
+		<constant name="SHADER_STAGE_MESH_TASK" value="10" enum="ShaderStage">
+			Mesh task shader stage. This optional stage can be used to dispatch any arbitrary amount of mesh shaders.
+		</constant>
+		<constant name="SHADER_STAGE_MESH" value="11" enum="ShaderStage">
+			Mesh shader stage. This can be used to draw meshes where geometry has been entirely generated within the shader.
+		</constant>
+		<constant name="SHADER_STAGE_MAX" value="12" enum="ShaderStage">
 			Represents the size of the [enum ShaderStage] enum.
 		</constant>
 		<constant name="SHADER_STAGE_VERTEX_BIT" value="1" enum="ShaderStage">
@@ -2806,6 +2843,12 @@
 		</constant>
 		<constant name="SHADER_STAGE_INTERSECTION_BIT" value="512" enum="ShaderStage">
 			Intersection shader stage bit (see also [constant SHADER_STAGE_INTERSECTION]).
+		</constant>
+		<constant name="SHADER_STAGE_MESH_TASK_BIT" value="1024" enum="ShaderStage">
+			Mesh task shader stage bit (see also [constant SHADER_STAGE_MESH_TASK]).
+		</constant>
+		<constant name="SHADER_STAGE_MESH_BIT" value="2048" enum="ShaderStage">
+			Mesh shader stage bit (see also [constant SHADER_STAGE_MESH]).
 		</constant>
 		<constant name="SHADER_LANGUAGE_GLSL" value="0" enum="ShaderLanguage">
 			Khronos' GLSL shading language (used natively by OpenGL and Vulkan). This is the language used for core Godot shaders.
@@ -2846,6 +2889,9 @@
 		</constant>
 		<constant name="SUPPORTS_HDR_OUTPUT" value="13" enum="Features">
 			Support for high dynamic range (HDR) output.
+		</constant>
+		<constant name="SUPPORTS_MESH_SHADER" value="14" enum="Features">
+			Features support for mesh and mesh task shader extension.
 		</constant>
 		<constant name="LIMIT_MAX_BOUND_UNIFORM_SETS" value="0" enum="Limit">
 			Maximum number of uniform sets that can be bound at a given time.
@@ -2965,6 +3011,24 @@
 		<constant name="LIMIT_METALFX_TEMPORAL_SCALER_MAX_SCALE" value="47" enum="Limit">
 			Returns the largest value for [member ProjectSettings.rendering/scaling_3d/scale] when using the MetalFX temporal upscaler.
 			[b]Note:[/b] The returned value is multiplied by a factor of [code]1000000[/code] to preserve 6 digits of precision. It must be divided by [code]1000000.0[/code] to convert the value to a floating point number.
+		</constant>
+		<constant name="LIMIT_MAX_MESH_TASK_WORKGROUP_COUNT_X" value="49" enum="Limit">
+			Maximum workgroup count for mesh task shaders on the X axis.
+		</constant>
+		<constant name="LIMIT_MAX_MESH_TASK_WORKGROUP_COUNT_Y" value="50" enum="Limit">
+			Maximum workgroup count for mesh task shaders on the Y axis.
+		</constant>
+		<constant name="LIMIT_MAX_MESH_TASK_WORKGROUP_COUNT_Z" value="51" enum="Limit">
+			Maximum workgroup count for mesh task shaders on the Z axis.
+		</constant>
+		<constant name="LIMIT_MAX_MESH_WORKGROUP_COUNT_X" value="52" enum="Limit">
+			Maximum workgroup count for mesh shaders on the X axis.
+		</constant>
+		<constant name="LIMIT_MAX_MESH_WORKGROUP_COUNT_Y" value="53" enum="Limit">
+			Maximum workgroup count for mesh shaders on the Y axis.
+		</constant>
+		<constant name="LIMIT_MAX_MESH_WORKGROUP_COUNT_Z" value="54" enum="Limit">
+			Maximum workgroup count for mesh shaders on the Z axis.
 		</constant>
 		<constant name="MEMORY_TEXTURES" value="0" enum="MemoryType">
 			Memory taken by textures.

@@ -95,6 +95,17 @@ class RenderingDeviceDriverVulkan : public RenderingDeviceDriver {
 		bool storage_input_output_16 = false;
 	};
 
+	struct MeshShaderCapabilities {
+		bool task_shader_is_supported = false;
+		bool mesh_shader_is_supported = false;
+		bool multiview_mesh_shader_is_supported = false;
+		bool primitive_fragment_shading_rate_mesh_shader_is_supported = false;
+		bool mesh_shader_queries_is_supported = false;
+
+		uint32_t max_task_work_group_count[3] = { 0, 0, 0 };
+		uint32_t max_mesh_work_group_count[3] = { 0, 0, 0 };
+	};
+
 	struct AccelerationStructureCapabilities {
 		bool acceleration_structure_support = false;
 		uint32_t min_acceleration_structure_scratch_offset_alignment = 0;
@@ -160,6 +171,7 @@ class RenderingDeviceDriverVulkan : public RenderingDeviceDriver {
 	StorageBufferCapabilities storage_buffer_capabilities;
 	RenderingShaderContainerFormatVulkan shader_container_format;
 	bool buffer_device_address_support = false;
+	MeshShaderCapabilities mesh_shader_capabilities;
 	bool vulkan_memory_model_support = false;
 	bool vulkan_memory_model_device_scope_support = false;
 	AccelerationStructureCapabilities acceleration_structure_capabilities;
@@ -654,6 +666,11 @@ public:
 	virtual void command_render_draw_indexed_indirect_count(CommandBufferID p_cmd_buffer, BufferID p_indirect_buffer, uint64_t p_offset, BufferID p_count_buffer, uint64_t p_count_buffer_offset, uint32_t p_max_draw_count, uint32_t p_stride) override final;
 	virtual void command_render_draw_indirect(CommandBufferID p_cmd_buffer, BufferID p_indirect_buffer, uint64_t p_offset, uint32_t p_draw_count, uint32_t p_stride) override final;
 	virtual void command_render_draw_indirect_count(CommandBufferID p_cmd_buffer, BufferID p_indirect_buffer, uint64_t p_offset, BufferID p_count_buffer, uint64_t p_count_buffer_offset, uint32_t p_max_draw_count, uint32_t p_stride) override final;
+
+	// Mesh Shader Drawing.
+	virtual void command_render_dispatch_mesh(CommandBufferID p_cmd_buffer, uint32_t p_x_groups, uint32_t p_y_groups, uint32_t p_z_groups) override final;
+	virtual void command_render_dispatch_mesh_indirect(CommandBufferID p_cmd_buffer, BufferID p_indirect_buffer, uint64_t p_offset, uint32_t p_draw_count, uint32_t p_stride) override final;
+	virtual void command_render_dispatch_mesh_indirect_count(CommandBufferID p_cmd_buffer, BufferID p_indirect_buffer, uint64_t p_offset, BufferID p_count_buffer, uint64_t p_count_buffer_offset, uint32_t p_max_draw_count, uint32_t p_stride) override final;
 
 	// Buffer binding.
 	virtual void command_render_bind_vertex_buffers(CommandBufferID p_cmd_buffer, uint32_t p_binding_count, const BufferID *p_buffers, const uint64_t *p_offsets, uint64_t p_dynamic_offsets) override final;

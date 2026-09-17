@@ -359,6 +359,13 @@ bool RenderingShaderContainerD3D12::_convert_spirv_to_nir(Span<ReflectShaderStag
 			MESA_SHADER_TESS_CTRL, // SHADER_STAGE_TESSELATION_CONTROL
 			MESA_SHADER_TESS_EVAL, // SHADER_STAGE_TESSELATION_EVALUATION
 			MESA_SHADER_COMPUTE, // SHADER_STAGE_COMPUTE
+			MESA_SHADER_COMPUTE, // SHADER_STAGE_RAYGEN (unsupported on D3D12, placeholder)
+			MESA_SHADER_COMPUTE, // SHADER_STAGE_ANY_HIT (unsupported on D3D12, placeholder)
+			MESA_SHADER_COMPUTE, // SHADER_STAGE_CLOSEST_HIT (unsupported on D3D12, placeholder)
+			MESA_SHADER_COMPUTE, // SHADER_STAGE_MISS (unsupported on D3D12, placeholder)
+			MESA_SHADER_COMPUTE, // SHADER_STAGE_INTERSECTION (unsupported on D3D12, placeholder)
+			MESA_SHADER_TASK, // SHADER_STAGE_MESH_TASK
+			MESA_SHADER_MESH, // SHADER_STAGE_MESH
 		};
 
 		Span<uint32_t> code = p_spirv[i].spirv();

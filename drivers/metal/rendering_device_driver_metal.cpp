@@ -1731,6 +1731,18 @@ void RenderingDeviceDriverMetal::command_render_draw_indirect_count(CommandBuffe
 	cb->render_draw_indirect_count(p_indirect_buffer, p_offset, p_count_buffer, p_count_buffer_offset, p_max_draw_count, p_stride);
 }
 
+void RenderingDeviceDriverMetal::command_render_dispatch_mesh(CommandBufferID p_cmd_buffer, uint32_t p_x_groups, uint32_t p_y_groups, uint32_t p_z_groups) {
+	ERR_FAIL_MSG("Mesh shaders are not implemented in the Metal driver.");
+}
+
+void RenderingDeviceDriverMetal::command_render_dispatch_mesh_indirect(CommandBufferID p_cmd_buffer, BufferID p_indirect_buffer, uint64_t p_offset, uint32_t p_draw_count, uint32_t p_stride) {
+	ERR_FAIL_MSG("Mesh shaders are not implemented in the Metal driver.");
+}
+
+void RenderingDeviceDriverMetal::command_render_dispatch_mesh_indirect_count(CommandBufferID p_cmd_buffer, BufferID p_indirect_buffer, uint64_t p_offset, BufferID p_count_buffer, uint64_t p_count_buffer_offset, uint32_t p_max_draw_count, uint32_t p_stride) {
+	ERR_FAIL_MSG("Mesh shaders are not implemented in the Metal driver.");
+}
+
 void RenderingDeviceDriverMetal::command_render_bind_vertex_buffers(CommandBufferID p_cmd_buffer, uint32_t p_binding_count, const BufferID *p_buffers, const uint64_t *p_offsets, uint64_t p_dynamic_offsets) {
 	MDCommandBufferBase *cb = (MDCommandBufferBase *)(p_cmd_buffer.id);
 	cb->render_bind_vertex_buffers(p_binding_count, p_buffers, p_offsets, p_dynamic_offsets);
@@ -2649,6 +2661,13 @@ uint64_t RenderingDeviceDriverMetal::limit_get(Limit p_limit) {
 			return (uint64_t)((1.0 / limits.temporalScalerInputContentMinScale) * 1000'000);
 		case LIMIT_MAX_SHADER_VARYINGS:
 			return limits.maxShaderVaryings;
+		case LIMIT_MAX_MESH_TASK_WORKGROUP_COUNT_X:
+		case LIMIT_MAX_MESH_TASK_WORKGROUP_COUNT_Y:
+		case LIMIT_MAX_MESH_TASK_WORKGROUP_COUNT_Z:
+		case LIMIT_MAX_MESH_WORKGROUP_COUNT_X:
+		case LIMIT_MAX_MESH_WORKGROUP_COUNT_Y:
+		case LIMIT_MAX_MESH_WORKGROUP_COUNT_Z:
+			return 0;
 		default: {
 #ifdef DEV_ENABLED
 			WARN_PRINT("Returning maximum value for unknown limit " + itos(p_limit) + ".");
