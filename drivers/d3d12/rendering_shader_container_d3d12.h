@@ -74,7 +74,7 @@ class RenderingShaderContainerD3D12 : public RenderingShaderContainer {
 	GDSOFTCLASS(RenderingShaderContainerD3D12, RenderingShaderContainer);
 
 public:
-	static constexpr uint32_t REQUIRED_SHADER_MODEL = 0x62; // D3D_SHADER_MODEL_6_2
+	static constexpr uint32_t REQUIRED_SHADER_MODEL = 0x65; // D3D_SHADER_MODEL_6_5 (mesh/amplification)
 	static constexpr uint32_t ROOT_CONSTANT_REGISTER = GODOT_NIR_DESCRIPTOR_SET_MULTIPLIER * (RenderingDeviceCommons::MAX_UNIFORM_SETS + 1);
 	static constexpr uint32_t RUNTIME_DATA_REGISTER = GODOT_NIR_DESCRIPTOR_SET_MULTIPLIER * (RenderingDeviceCommons::MAX_UNIFORM_SETS + 2);
 	static constexpr uint32_t FORMAT_VERSION = 1;
@@ -84,6 +84,13 @@ public:
 		UINT32_MAX, // SHADER_STAGE_TESSELATION_CONTROL
 		UINT32_MAX, // SHADER_STAGE_TESSELATION_EVALUATION
 		2, // SHADER_STAGE_COMPUTE
+		UINT32_MAX, // SHADER_STAGE_RAYGEN
+		UINT32_MAX, // SHADER_STAGE_ANY_HIT
+		UINT32_MAX, // SHADER_STAGE_CLOSEST_HIT
+		UINT32_MAX, // SHADER_STAGE_MISS
+		UINT32_MAX, // SHADER_STAGE_INTERSECTION
+		UINT32_MAX, // SHADER_STAGE_MESH_TASK
+		UINT32_MAX, // SHADER_STAGE_MESH
 	};
 
 	struct ReflectionBindingSetDataD3D12 {

@@ -639,6 +639,13 @@ static const char *SHADER_STAGE_NAMES[] = {
 	"tess_ctrl", // RDC::SHADER_STAGE_TESSELATION_CONTROL
 	"tess_eval", // RDC::SHADER_STAGE_TESSELATION_EVALUATION
 	"comp", // RDC::SHADER_STAGE_COMPUTE
+	"raygen", // RDC::SHADER_STAGE_RAYGEN
+	"any_hit", // RDC::SHADER_STAGE_ANY_HIT
+	"closest_hit", // RDC::SHADER_STAGE_CLOSEST_HIT
+	"miss", // RDC::SHADER_STAGE_MISS
+	"intersection", // RDC::SHADER_STAGE_INTERSECTION
+	"mesh_task", // RDC::SHADER_STAGE_MESH_TASK
+	"mesh", // RDC::SHADER_STAGE_MESH
 };
 
 void ShaderCacheEntry::notify_free() const {

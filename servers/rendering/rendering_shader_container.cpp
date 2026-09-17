@@ -255,6 +255,8 @@ Error RenderingShaderContainer::reflect_spirv(const String &p_shader_name, Span<
 			case RDC::SHADER_STAGE_FRAGMENT:
 			case RDC::SHADER_STAGE_TESSELATION_CONTROL:
 			case RDC::SHADER_STAGE_TESSELATION_EVALUATION:
+			case RDC::SHADER_STAGE_MESH_TASK:
+			case RDC::SHADER_STAGE_MESH:
 				pipeline_type = RDC::PIPELINE_TYPE_RASTERIZATION;
 				break;
 			case RDC::SHADER_STAGE_COMPUTE:

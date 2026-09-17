@@ -59,6 +59,8 @@ Vector<uint8_t> compile_glslang_shader(RenderingDeviceCommons::ShaderStage p_sta
 		EShLangClosestHit,
 		EShLangMiss,
 		EShLangIntersect,
+		EShLangTask,
+		EShLangMesh,
 	};
 
 	int ClientInputSemanticsVersion = 100; // maps to, say, #define VULKAN 100

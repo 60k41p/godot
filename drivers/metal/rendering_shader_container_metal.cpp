@@ -232,6 +232,13 @@ static spv::ExecutionModel SHADER_STAGE_REMAP[RDD::SHADER_STAGE_MAX] = {
 	spv::ExecutionModelTessellationControl, // RDD::SHADER_STAGE_TESSELATION_CONTROL
 	spv::ExecutionModelTessellationEvaluation, // RDD::SHADER_STAGE_TESSELATION_EVALUATION
 	spv::ExecutionModelGLCompute, // RDD::SHADER_STAGE_COMPUTE
+	spv::ExecutionModelMax, // RDD::SHADER_STAGE_RAYGEN
+	spv::ExecutionModelMax, // RDD::SHADER_STAGE_ANY_HIT
+	spv::ExecutionModelMax, // RDD::SHADER_STAGE_CLOSEST_HIT
+	spv::ExecutionModelMax, // RDD::SHADER_STAGE_MISS
+	spv::ExecutionModelMax, // RDD::SHADER_STAGE_INTERSECTION
+	spv::ExecutionModelMax, // RDD::SHADER_STAGE_MESH_TASK
+	spv::ExecutionModelMax, // RDD::SHADER_STAGE_MESH
 };
 
 spv::ExecutionModel get_stage(uint32_t p_stages_mask, RDD::ShaderStage p_stage) {
