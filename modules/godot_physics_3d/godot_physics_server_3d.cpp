@@ -102,6 +102,10 @@ RID GodotPhysicsServer3D::custom_shape_create() {
 	ERR_FAIL_V(RID());
 }
 
+RID GodotPhysicsServer3D::ellipsoid_shape_create() {
+	ERR_FAIL_V_MSG(RID(), "Ellipsoid shapes are not supported by Godot Physics 3D. Use the Jolt Physics engine instead.");
+}
+
 void GodotPhysicsServer3D::shape_set_data(RID p_shape, const Variant &p_data) {
 	GodotShape3D *shape = shape_owner.get_or_null(p_shape);
 	ERR_FAIL_NULL(shape);

@@ -43,6 +43,7 @@
 #include "scene/resources/3d/concave_polygon_shape_3d.h"
 #include "scene/resources/3d/convex_polygon_shape_3d.h"
 #include "scene/resources/3d/cylinder_shape_3d.h"
+#include "scene/resources/3d/ellipsoid_shape_3d.h"
 #include "scene/resources/3d/height_map_shape_3d.h"
 #include "scene/resources/3d/separation_ray_shape_3d.h"
 #include "scene/resources/3d/sphere_shape_3d.h"
@@ -602,6 +603,40 @@ void CollisionShape3DGizmoPlugin::redraw(EditorNode3DGizmo *p_gizmo) {
 
 		if (!shape_readonly) {
 			Vector<Vector3> handles = helper->cylinder_get_handles(cs2->get_height(), cs2->get_radius());
+			p_gizmo->add_handles(handles, handles_material);
+		}
+	}
+
+	if (Object::cast_to<EllipsoidShape3D>(*s)) {
+		Ref<EllipsoidShape3D> es = s;
+		const Vector3 radii = es->get_radii();
+
+		const int segments = 128;
+		Vector<Vector3> points;
+		points.resize(3 * segments * 2);
+
+		int index = 0;
+		for (int i = 0; i < segments; i++) {
+			const real_t ra = Math::TAU * (real_t)i / segments;
+			const real_t rb = Math::TAU * (real_t)(i + 1) / segments;
+			const Point2 a(Math::sin(ra), Math::cos(ra));
+			const Point2 b(Math::sin(rb), Math::cos(rb));
+
+			points.write[index++] = Vector3(a.x, 0, a.y) * radii;
+			points.write[index++] = Vector3(b.x, 0, b.y) * radii;
+			points.write[index++] = Vector3(0, a.x, a.y) * radii;
+			points.write[index++] = Vector3(0, b.x, b.y) * radii;
+			points.write[index++] = Vector3(a.x, a.y, 0) * radii;
+			points.write[index++] = Vector3(b.x, b.y, 0) * radii;
+		}
+
+		p_gizmo->add_lines(points, material, false, collision_color);
+		p_gizmo->add_collision_segments(points);
+		if (!shape_readonly) {
+			Vector<Vector3> handles;
+			handles.push_back(Vector3(radii.x, 0, 0));
+			handles.push_back(Vector3(0, radii.y, 0));
+			handles.push_back(Vector3(0, 0, radii.z));
 			p_gizmo->add_handles(handles, handles_material);
 		}
 	}

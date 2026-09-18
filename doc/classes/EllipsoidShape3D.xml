@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="EllipsoidShape3D" inherits="Shape3D" api_type="core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+	<brief_description>
+		A 3D ellipsoid shape used for physics collision.
+	</brief_description>
+	<description>
+		A 3D ellipsoid shape, intended for use in physics. Usually used to provide a shape for a [CollisionShape3D].
+		The shape's surface is defined by the equation [code]x² / radius_x² + y² / radius_y² + z² / radius_z² = 1[/code], where the radii are the semi-axes of the ellipsoid along the X, Y and Z axes.
+		When all radii are equal, this shape is identical to a [SphereShape3D] with the same radius.
+		[b]Performance:[/b] [EllipsoidShape3D] is fast to check collisions against, though slower than [SphereShape3D].
+		[b]Note:[/b] This shape is only supported by the Jolt Physics engine.
+		[b]Note:[/b] Ellipsoids with very large aspect ratios (one radius much smaller than the others) can behave poorly under deep penetration, such as fast impacts or spawning inside other geometry. When moving such thin shapes at high speed, enable [member RigidBody3D.continuous_cd] on the body.
+	</description>
+	<members>
+		<member name="radii" type="Vector3" setter="set_radii" getter="get_radii" default="Vector3(0.5, 0.5, 0.5)">
+			The ellipsoid's radii, which act as the semi-axes of the shape along the X, Y and Z axes. Each component must be greater than 0.
+		</member>
+	</members>
+</class>
