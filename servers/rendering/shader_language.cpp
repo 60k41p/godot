@@ -7254,6 +7254,8 @@ ShaderLanguage::Node *ShaderLanguage::_parse_expression(BlockNode *p_block, cons
 					if (member_type == TYPE_STRUCT) {
 						member_struct_name = expr->get_datatype_name();
 					}
+				} else if (expr->type == Node::NODE_TYPE_VARIABLE && static_cast<VariableNode *>(expr)->name == "INSTANCE_EXTRA") {
+					member_type = expr->get_datatype();
 				} else {
 					switch (expr->get_datatype()) {
 						case TYPE_BVEC2:

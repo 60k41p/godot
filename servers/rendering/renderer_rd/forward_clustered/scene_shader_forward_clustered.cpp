@@ -35,6 +35,7 @@
 #include "servers/rendering/renderer_rd/forward_clustered/render_forward_clustered.h"
 #include "servers/rendering/renderer_rd/renderer_compositor_rd.h"
 #include "servers/rendering/renderer_rd/storage_rd/material_storage.h"
+#include "servers/rendering/renderer_rd/storage_rd/mesh_storage.h"
 
 using namespace RendererSceneRenderImplementation;
 
@@ -770,6 +771,7 @@ void SceneShaderForwardClustered::init(const String p_defines) {
 		actions.renames["EMISSION"] = "emission";
 		actions.renames["POINT_COORD"] = "point_coord";
 		actions.renames["INSTANCE_CUSTOM"] = "instance_custom";
+		actions.renames["INSTANCE_EXTRA"] = "_instance_extra_disabled";
 		actions.renames["SCREEN_UV"] = "screen_uv";
 		actions.renames["DEPTH"] = "gl_FragDepth";
 		actions.renames["FOG"] = "fog";
@@ -999,6 +1001,11 @@ void fragment() {
 		u.append_id(default_vec4_xform_buffer);
 		u.binding = 0;
 		uniforms.push_back(u);
+		RD::Uniform u2;
+		u2.uniform_type = RD::UNIFORM_TYPE_STORAGE_BUFFER;
+		u2.append_id(RendererRD::MeshStorage::get_singleton()->get_default_extra_data_buffer());
+		u2.binding = 1;
+		uniforms.push_back(u2);
 
 		default_vec4_xform_uniform_set = RD::get_singleton()->uniform_set_create(uniforms, default_shader_rd, RenderForwardClustered::TRANSFORMS_UNIFORM_SET);
 	}
