@@ -101,4 +101,15 @@ public:
 	virtual void material_get_instance_shader_parameters(RID p_material, List<InstanceShaderParam> *r_parameters) = 0;
 
 	virtual void material_update_dependency(RID p_material, DependencyTracker *p_instance) = 0;
+
+	// The buffer backing INSTANCE_EXTRA is owned by the caller (created with RenderingDevice).
+	// The storage never frees it; it must remain valid while registered. An invalid RID
+	// restores the default zero-initialized buffer.
+	virtual void set_instance_userdata_rd_rid(RID p_buffer) {}
+	// Returns the buffer bound to the renderers: the registered buffer, or the default
+	// zero-initialized buffer when none was registered. Internal use only.
+	virtual RID get_instance_userdata_rd_rid() const { return RID(); }
+	// Returns the buffer registered via set_instance_userdata_rd_rid, or an invalid RID
+	// if none was registered. This is what the public API reports back.
+	virtual RID get_instance_userdata_buffer() const { return RID(); }
 };

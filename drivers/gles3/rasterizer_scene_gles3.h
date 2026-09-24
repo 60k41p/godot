@@ -368,6 +368,8 @@ private:
 		virtual void pair_voxel_gi_instances(const RID *p_voxel_gi_instances, uint32_t p_voxel_gi_instance_count) override {}
 
 		virtual void set_softshadow_projector_pairing(bool p_softshadow, bool p_projector) override {}
+		virtual void set_instance_userdata_offset(uint32_t p_offset) override {}
+		virtual void set_instance_custom_id(uint32_t p_id) override {}
 	};
 
 	virtual uint32_t get_max_lights_total() override;

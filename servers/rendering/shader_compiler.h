@@ -90,6 +90,8 @@ public:
 		bool uses_screen_texture = false;
 		bool uses_depth_texture = false;
 		bool uses_normal_roughness_texture = false;
+
+		String error;
 	};
 
 	struct DefaultIdentifierActions {
@@ -104,6 +106,8 @@ public:
 		String base_uniform_string;
 		String global_buffer_array_variable;
 		String instance_uniform_index_variable;
+		String instance_custom_id_variable;
+		String instance_userdata_index_variable;
 		uint32_t base_varying_index = 0;
 		bool apply_luminance_multiplier = false;
 		bool check_multiview_samplers = false;

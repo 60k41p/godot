@@ -7327,7 +7327,14 @@ ShaderLanguage::Node *ShaderLanguage::_parse_expression(BlockNode *p_block, cons
 						case TYPE_VEC4:
 						case TYPE_IVEC4:
 						case TYPE_UVEC4:
-						case TYPE_MAT4:
+						case TYPE_MAT4: {
+							if (expr->type == Node::NODE_TYPE_VARIABLE && static_cast<VariableNode *>(expr)->name == "INSTANCE_EXTRA") {
+								// INSTANCE_EXTRA is a view into the per-instance userdata buffer.
+								// Indexing it yields the vec4 stored at the instance userdata offset plus the index.
+								member_type = TYPE_VEC4;
+								break;
+							}
+
 							if (index->type == Node::NODE_TYPE_CONSTANT) {
 								uint32_t index_constant = static_cast<ConstantNode *>(index)->values[0].uint;
 								if (index_constant >= 4) {
@@ -7356,6 +7363,7 @@ ShaderLanguage::Node *ShaderLanguage::_parse_expression(BlockNode *p_block, cons
 									break;
 							}
 							break;
+						}
 						default: {
 							_set_error(vformat(RTR("An object of type '%s' can't be indexed."), (expr->get_datatype() == TYPE_STRUCT ? expr->get_datatype_name() : get_datatype_name(expr->get_datatype()))));
 							return nullptr;
