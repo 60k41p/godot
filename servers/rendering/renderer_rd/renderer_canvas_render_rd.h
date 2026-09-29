@@ -383,7 +383,7 @@ class RendererCanvasRenderRD : public RendererCanvasRender {
 		ShaderSpecialization shader_specialization;
 		uint32_t specular_shininess;
 		uint32_t batch_flags;
-		uint32_t pad0;
+		uint32_t extra_data_stride;
 
 		float msdf[2];
 		float color_texture_pixel_size[2];
@@ -556,7 +556,7 @@ class RendererCanvasRenderRD : public RendererCanvasRender {
 			PushConstant pc;
 			pc.specular_shininess = tex_info->specular_shininess;
 			pc.batch_flags = tex_info->flags | flags;
-			pc.pad0 = 0;
+			pc.extra_data_stride = 1;
 
 			pc.msdf[0] = msdf_pix_range;
 			pc.msdf[1] = msdf_outline;
