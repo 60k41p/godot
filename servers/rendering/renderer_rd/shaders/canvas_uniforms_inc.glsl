@@ -52,7 +52,7 @@ layout(push_constant, std430) uniform Params {
 	uint sc_packed_0;
 	uint specular_shininess;
 	uint batch_flags;
-	uint pad0;
+	uint extra_data_stride;
 
 	vec2 msdf;
 	vec2 color_texture_pixel_size;
@@ -194,6 +194,11 @@ layout(set = 2, binding = 0, std430) restrict readonly buffer Transforms {
 	vec4 data[];
 }
 transforms;
+
+layout(set = 2, binding = 1, std430) restrict readonly buffer InstanceExtra {
+	vec4 data[];
+}
+instance_extra_ssbo;
 
 /* SET3: Texture */
 

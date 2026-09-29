@@ -104,6 +104,7 @@ public:
 		String base_uniform_string;
 		String global_buffer_array_variable;
 		String instance_uniform_index_variable;
+		String instance_extra_stride_expression = "draw_call.extra_data_stride";
 		uint32_t base_varying_index = 0;
 		bool apply_luminance_multiplier = false;
 		bool check_multiview_samplers = false;

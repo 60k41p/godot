@@ -1846,6 +1846,7 @@ RendererCanvasRenderRD::RendererCanvasRenderRD() {
 
 		actions.global_buffer_array_variable = "global_shader_uniforms.data";
 		actions.instance_uniform_index_variable = "read_draw_data_instance_offset";
+		actions.instance_extra_stride_expression = "params.extra_data_stride";
 
 		shader.compiler.initialize(actions);
 	}
@@ -2045,6 +2046,14 @@ RendererCanvasRenderRD::RendererCanvasRenderRD() {
 			u.binding = 0;
 			u.append_id(RendererRD::MeshStorage::get_singleton()->get_default_rd_storage_buffer());
 			uniforms.push_back(u);
+		}
+
+		{
+			RD::Uniform u2;
+			u2.uniform_type = RD::UNIFORM_TYPE_STORAGE_BUFFER;
+			u2.binding = 1;
+			u2.append_id(RendererRD::MeshStorage::get_singleton()->get_default_extra_data_buffer());
+			uniforms.push_back(u2);
 		}
 
 		state.default_transforms_uniform_set = RD::get_singleton()->uniform_set_create(uniforms, shader.default_version_rd_shader, TRANSFORMS_UNIFORM_SET);
@@ -3156,6 +3165,7 @@ void RendererCanvasRenderRD::_render_batch(RD::DrawListID p_draw_list, CanvasSha
 				const Item::CommandMultiMesh *mm = static_cast<const Item::CommandMultiMesh *>(p_batch->command);
 				RID multimesh = mm->multimesh;
 				mesh = mesh_storage->multimesh_get_mesh(multimesh);
+				push_constant.base.extra_data_stride = mesh_storage->multimesh_get_extra_data_stride(multimesh);
 
 				RID uniform_set = mesh_storage->multimesh_get_2d_uniform_set(multimesh, shader.default_version_rd_shader, TRANSFORMS_UNIFORM_SET);
 				RD::get_singleton()->draw_list_bind_uniform_set(p_draw_list, uniform_set, TRANSFORMS_UNIFORM_SET);
