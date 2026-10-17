@@ -1044,6 +1044,7 @@
 				- [constant SHAPE_HEIGHTMAP]: a dictionary containing the keys [code]"width"[/code] and [code]"depth"[/code] with [int] values, and the key [code]"heights"[/code] with a value that is a packed array of [float]s of length [code]width * depth[/code] (that is a [PackedFloat32Array], or a [PackedFloat64Array] if Godot was compiled with the [code]precision=double[/code] option), and optionally the keys [code]"min_height"[/code] and [code]"max_height"[/code] with [float] values,
 				- [constant SHAPE_SOFT_BODY]: the input [param data] is ignored and this method has no effect,
 				- [constant SHAPE_CUSTOM]: the input [param data] is interpreted by a custom physics server, if it supports custom shapes.
+				- [constant SHAPE_ELLIPSOID]: a [Vector3] containing the radii of the ellipsoid on the X, Y and Z axes.
 			</description>
 		</method>
 		<method name="shape_set_margin">
@@ -1734,6 +1735,9 @@
 		</constant>
 		<constant name="SHAPE_CUSTOM" value="10" enum="ShapeType">
 			Constant used internally for a custom shape. Any attempt to create this kind of shape results in an error when using Godot Physics or Jolt Physics.
+		</constant>
+		<constant name="SHAPE_ELLIPSOID" value="11" enum="ShapeType">
+			Constant for creating an ellipsoid shape (used by the [EllipsoidShape3D] resource).
 		</constant>
 		<constant name="AREA_PARAM_GRAVITY_OVERRIDE_MODE" value="0" enum="AreaParameter">
 			Constant to set/get gravity override mode in an area. See [enum AreaSpaceOverrideMode] for possible values.

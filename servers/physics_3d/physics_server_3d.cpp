@@ -690,6 +690,8 @@ RID PhysicsServer3D::shape_create(ShapeType p_shape) {
 			return heightmap_shape_create();
 		case SHAPE_CUSTOM:
 			return custom_shape_create();
+		case SHAPE_ELLIPSOID:
+			return ellipsoid_shape_create();
 		default:
 			return RID();
 	}
@@ -1061,6 +1063,7 @@ void PhysicsServer3D::_bind_methods() {
 	BIND_ENUM_CONSTANT(SHAPE_HEIGHTMAP);
 	BIND_ENUM_CONSTANT(SHAPE_SOFT_BODY);
 	BIND_ENUM_CONSTANT(SHAPE_CUSTOM);
+	BIND_ENUM_CONSTANT(SHAPE_ELLIPSOID);
 
 	BIND_ENUM_CONSTANT(AREA_PARAM_GRAVITY_OVERRIDE_MODE);
 	BIND_ENUM_CONSTANT(AREA_PARAM_GRAVITY);
