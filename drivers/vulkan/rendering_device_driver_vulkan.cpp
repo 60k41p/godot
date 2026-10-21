@@ -58,7 +58,7 @@
 #define PRINT_NATIVE_COMMANDS 0
 
 // Enable the use of re-spirv for optimizing shaders after applying specialization constants.
-#define RESPV_ENABLED 1
+#define RESPV_ENABLED 0
 
 // Only enable function inlining for re-spirv when dealing with a shader that uses specialization constants.
 #define RESPV_ONLY_INLINE_SHADERS_WITH_SPEC_CONSTANTS 1
